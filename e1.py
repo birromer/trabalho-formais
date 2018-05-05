@@ -35,14 +35,14 @@ class gramatica(object):
                 for n in range(i+1,len(conteudo)):
                     self.regras.append(conteudo[n])
                     i+=1
-                    
+
     def defFormal(self):
         var = ", ".join(self.variaveis)
         term = ", ".join(self.terminais)
         prod =  ",\n".join(self.regras)
         print("G = ({%s},{%s},P ,%s)" % (var, term, self.inicial))
         print("P = {%s}" % (prod.replace("   "," | ")))
-        
+
 blabla = gramatica()
 blabla.leGramatica("gramatica_exemplo2.txt")
 blabla.defFormal()
