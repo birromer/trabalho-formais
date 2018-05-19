@@ -1,4 +1,4 @@
-import itertools
+import itertools as it
 
 class gramatica(object):
     def __init__(self):
@@ -49,7 +49,7 @@ class gramatica(object):
                     self.bonito.append(conteudo[n])
                     i+=1
         self.formataProd()
-
+        
 
     def defFormal(self):
         var = ", ".join(self.variaveis)
@@ -83,19 +83,51 @@ class gramatica(object):
             naoGeraVazio = 0
             if prod[1] == 'V':
                 self.regras.remove(prod)
-        #gera produções substituindo as ocorrências das variáveis do fecho
+
+        def geraProdComb(prod, nRepetidas, posicoes, self):
+            combInd =[]
+            for i in range(1,nRepetidas+1):
+                combInd += ([x for x in it.combinations(posicoes,i)])
+                
+            combinacoesIndices = lambda lista: [item for sublista in lista for item in sublista]
+            
+            for  comb in combInd:
+                novaProd = []
+                for i in range(len(prod)):
+                    if i not in comb:
+                        novaProd.append(prod[i])
+                if novaProd not in self.regras and len(novaProd) > 1:
+                    self.regras.append(novaProd)
+            
+            
+        #gera produções substituindo as ocorrências das variáveis do fecho                
         for var in prodVazio:
             for prod in self.regras:
                 for item in prod:
-                    if var in  item:
-                        novaProd = [item for item in prod if item == prod[0] or item != var]
-                        if novaProd not in self.regras and len(novaProd) > 1:
-                            self.regras.append(novaProd)
-        """
+                    if var ==  item:
+                        novaProd = [prod[0]]
+                        varsProdVazioIguais = 0
+                        varsIndices = []
+                        for i in range(1,len(prod)):
+                                if prod[i] == var:
+                                    varsProdVazioIguais +=1
+                                    varsIndices.append(i)
+                                    
+                        if varsProdVazioIguais >=2:
+                            geraProdComb(prod,varsProdVazioIguais,varsIndices,self)
+                        else:
+                            for i in range(1,len(prod)):    
+                                if prod[i] != var:
+                                    novaProd.append(prod[i])
+                            if novaProd not in self.regras and len(novaProd) > 1:
+                                self.regras.append(novaProd)
+                               
         #gera produção vazia a partir do inicial caso necessário
         if self.inicial in prodVazio:
             self.regras.append([self.inicial, 'V'])
-        """
+            if 'V' not in self.terminais:
+                self.terminais.append('V')
+        
 
     def removeUnit(self):
         #cria fechos
@@ -134,50 +166,58 @@ class gramatica(object):
 
     def removeInuteis(self):
         uteis = []
-        #inicializa com variáveis que chegam em terminais
+        #inicializa com variáveis que chegam apenas em terminais
         for prod in self.regras:
-            for item in prod[1:]:
-                if item in self.terminais and prod[0] not in uteis:
+            temp = list(filter(lambda x: x in self.terminais, prod))
+            if len(temp) == len(prod) - 1 and prod[0] not in uteis:
+                uteis.append(prod[0])
+        #gera lista de todos símbolos indiretamente que chegam em terminais 
+        for prod in self.regras:
+            for util in uteis:
+                if util in prod[1:] and prod[0] not in uteis:
                     uteis.append(prod[0])
-        #elimina casos com variáveis do lado direito
-        bla =[]
-        #print(uteis)
-        for var in uteis:
-            for prod in self.regras:
-                if prod[0] == var:
-                    flag = 0
-                    for l in prod[1:]:
-                        if l in self.variaveis:
-                            flag = 1
-                    if flag == 0 and prod[0] not in uteis:
-                        bla.append(prod[0])
-
-        print(bla)
-
-"""
-criar lista com todas variaveis que levam APENAS a terminais (nao pode haver variavel do lado direito da produção)        
-"""
-
-#        print(uteis)
-        input("k")
-
-        #gera lista de símbolos antingíveis
-        atingiveis = [self.inicial]
+        #remove as variáveis que não chegam em terminais        
+        self.variaveis = [var for var in self.variaveis if var in uteis]
+        temp = []
         for prod in self.regras:
-            if prod[0] == self.inicial:
-                for i in range(1,len(prod)):
-                    if prod[i] not in self.terminais and prod[i] not in atingiveis:
-                        atingiveis.append(prod[i])
-        #exclui produções de variáveis que não levam a terminais
-#        self.regras = filter(lambda x: x in uteis, self.regras)
+            adiciona = 1
+            for item in prod:
+                if item not in uteis :
+                    adiciona = 0
+                    break
+            if adiciona == 1:
+                temp.append(prod)
+            elif  adiciona == 0 and item in self.terminais:
+                temp.append(prod)
+        self.regras = temp
+        #gera lista de variáveis antingíveis
+        varAtingiveis = [self.inicial]
+        tam = 0
+        while tam !=  len(varAtingiveis):
+            tam = len(varAtingiveis)
+            for prod in self.regras:
+                if prod[0] in varAtingiveis:
+                    for i in range(1,len(prod)):
+                        if prod[i] not in self.terminais and prod[i] not in varAtingiveis:
+                            varAtingiveis.append(prod[i])
+         #gera lista de terminais atingíveis   
+        terAtingiveis = []
+        for prod in self.regras:
+            for item in prod:
+                if item in self.terminais and prod[0] in varAtingiveis:
+                    terAtingiveis.append(item)
+        #remove as variáveis que não são atingíveis
+        self.regras = [prod for prod in self.regras if prod[0] in varAtingiveis]
+        self.variaveis = [var for var in self.variaveis if var in varAtingiveis]
+        self.terminais = [ter for ter in self.terminais if ter in terAtingiveis]
 
-                        
 
-        
+    def simplifica(self):
+        self.removeVazios()
+        self.removeUnit()
+        self.removeInuteis()
 
 blabla = gramatica()
-blabla.leGramatica("gramatica_exemplo3.txt")
+blabla.leGramatica("gramatica_exemplo1.txt")
 #blabla.defFormal()
-blabla.removeVazios()
-blabla.removeUnit()
-blabla.removeInuteis()
+blabla.simplifica()
