@@ -288,9 +288,14 @@ class gramatica(object):
                     if tabela[len(tabela)-1][j] in prod[1:]:
                         novaCelula.append(prod[0])
                 tabela[i][j] = novaCelula
+             
+        n = len(base)
+        for s in range(n-2, -1 -1):
+            print(s)
+            for r in range(len(tabela[s])+1):
+                print(tabela[n][s])   
+        print(list(range(n-2,-1,-1)))
         pt(tabela)
-            
-        
         
         
             
@@ -306,7 +311,7 @@ if __name__ == "__main__":
 #     print(blabla.terminais)
 #     print("Inicial: " + blabla.inicial)
 #     print("Regras de produção:")
+#     for prod in blabla.regras:
+#         print(prod)
 # =============================================================================
-    for prod in blabla.regras:
-        print(prod)
     blabla.parser("dog runs in the park")
