@@ -288,14 +288,10 @@ class gramatica(object):
                     if tabela[len(tabela)-1][j] in prod[1:]:
                         novaCelula.append(prod[0])
                 tabela[i][j] = novaCelula
-             
-        n = len(base)
-        for s in range(n-2, -1 -1):
-            print(s)
-            for r in range(len(tabela[s])+1):
-                print(tabela[n][s])   
-        print(list(range(n-2,-1,-1)))
-        pt(tabela)
+        #preenche o resto da tabela com os geradores das linhas abaixo
+        for s in range(len(base)-2, -1, -1):
+            for r in range(len(tabela[s])):
+                print(tabela[s][r])
         
         
             
