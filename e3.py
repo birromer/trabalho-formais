@@ -258,8 +258,32 @@ class gramatica(object):
             i+=1
 
 
-
-    def parser(self, entrada):
+    def geraArvoreDerivacao(self, tabela):
+        arvore = []
+        
+        for i in range(len(tabela)):
+            for j in range(len(tabela[i])):
+                posProds = [] #possiveis producoes a serem selecionadas
+                k = len(tabela)-2
+                posDX = i+1
+                posDY = j+1
+                while k != i:
+                    for var1 in tabela[k][j]:
+                        for var2 in tabela[posDX][posDY]:
+                            for prod in self.regras:
+                                if prod[1] == var1 and prod[2] == var2: #and len(prod) == 2 nao precisa pois ja na forma normal
+                                    if prod[0] not in posProds:
+                                        posProds.append(prod)
+                    print(posProds)
+                    arvore.append(posProds)
+                    posDX+=1
+                    posDY+=1
+                    k+=1 
+        print(posProds)
+        
+        
+    def cyk(self, entrada):
+        aceita = 0
         def pt(tabela):
             for linha in tabela:
                 print(linha)
@@ -306,18 +330,23 @@ class gramatica(object):
                    tabela[i][j] = prods
                    posDX+=1
                    posDY+=1
-                   k-=1
-                
-        pt(tabela)
+                   k-=1      
         
+        if self.inicial in tabela[0][0]:
+            aceita = 1
 
-
+        if aceita:
+            print("Entrada aceita")
+            self.geraArvoreDerivacao(tabela)
+            pt(tabela)
+        else:
+            print("Entrada rejeitada")
 
 if __name__ == "__main__":
     blabla = gramatica()
-    blabla.leGramatica("gramatica_exemplo3.txt")    
- #   blabla.leGramatica("gramatica_exemplo1.txt")
-    #blabla.defFormal()
+    blabla.leGramatica("gramatica_exemplo2.txt")    
+#    blabla.leGramatica("gramatica_exemplo1.txt")
+#    blabla.defFormal()
     blabla.djowsky()
-    blabla.parser("dog runs in the park")
- #   blabla.parser("a a b a")
+    blabla.cyk("dog runs in the park")
+#    blabla.parser("a a b a")
