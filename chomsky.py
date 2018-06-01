@@ -260,7 +260,7 @@ class gramatica(object):
             
 if __name__ == "__main__":
     blabla = gramatica()
-    blabla.leGramatica("gramatica_exemplo2.txt")
+    blabla.leGramatica("gramatica_exemplo3.txt")
     #blabla.defFormal()
     #transforma a gramatica em forma normal de Chomsky
     print("Gramática na forma normal de Chomsky")
