@@ -1,5 +1,6 @@
 import itertools as it
-import numpy as np
+#import numpy as np
+#import pandas as pd
 
 class gramatica(object):
     def __init__(self):
@@ -264,24 +265,24 @@ class gramatica(object):
         #junta todas producoes de variaveis possivelmente utilizadas na arvore
         for i in range(len(tabela)-1):
             for j in range(len(tabela[i])):
-                print("Nodo testado")
-                print(str(i) + ' ' + str(j))
+#                print("Nodo testado")
+#                print(str(i) + ' ' + str(j))
                 pProds = [] #possiveis producoes a serem selecionadas
                 k = len(tabela)-2
                 posDX = i+1
                 posDY = j+1
                 while k != i:
-                    print("K")
-                    print(str(k) + ' ' + str(j))
+#                    print("K")
+#                    print(str(k) + ' ' + str(j))
                     for var1 in tabela[k][j]:
-                        print("D")
-                        print(str(posDX) + ' ' + str(posDY))
+#                        print("D")
+#                        print(str(posDX) + ' ' + str(posDY))
                         for var2 in tabela[posDX][posDY]:
                             for prod in self.regras:
                                 if prod[1] == var1 and prod[2] == var2: #and len(prod) == 2 nao precisa pois ja na forma normal
                                     if prod not in pProds:
                                         pProds.append(prod)
-                    print(pProds)
+#                    print(pProds)
                     if pProds not in posProds:
                         posProds.append(pProds)
                     posDX+=1
@@ -291,20 +292,43 @@ class gramatica(object):
         temp = []
         for pProd in posProds:
             for prod in pProd:
-                temp.append(prod)
+                if prod not in posProds and prod not in temp:
+                    temp.append(prod)
         for prod in self.regras:
             for pProds in posProds:
                 for posProd in pProds:
                     if prod[1] in base and prod[0] in posProd[1:]:
-                        if prod not in posProds:
+                        if prod not in posProds and prod not in temp:
                             temp.append(prod)
         posProds = temp
-        #filtra producoes de terminais
+        
         for item in posProds:
             print(item)
         
+        arvores = [[] for x in range(99)]
+        """
+        #filtra producoes de terminais
+        i=0
+        for terminal in base:
+            for prod in posProds:
+                if prod[1] == terminal:
+                    arvores[i].append(prod)
+        """
+        #gera arvores por derivação a esquerda
+        tam = -1
         
+        IarvoreAtual = 0    #indice da arvore 
+        IprodAtual = 0      #indice da producao analisada
+        IvarAtual = 1       #indice da variavel analisada
+        arvores[IarvoreAtual] = [posProds[0]]
+        varAtual = arvores[IarvoreAtual][IprodAtual][IvarAtual]
         
+        while tam != len(arvores):
+            tam = len(arvores)
+            for prod in posProds:
+                pass
+                
+            
     def parserCYK(self, entrada):
         aceita = 0
         def pt(tabela):
@@ -358,7 +382,8 @@ class gramatica(object):
         if self.inicial in tabela[0][0]:
             aceita = 1
         #embeleza matriz resultante
-#        printavel = it.chain.from_iterable(it.izip_longest(*(x.splitlines() for x in y), fillvalue='') for y in tabela)
+ #       printavel = np.matrix(tabela)
+ #       print(pd.DataFrame(printavel))
         #imprime resultado e chama criacao da arvore de derivacao 
         if aceita:
             pt(tabela)
