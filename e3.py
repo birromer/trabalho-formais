@@ -258,29 +258,45 @@ class gramatica(object):
             i+=1
 
 
-    def geraArvoreDerivacao(self, tabela):
+    def geraArvoreDerivacao(self, tabela, base):
         arvore = []
         
-        for i in range(len(tabela)):
+        #junta todas producoes de variaveis possivelmente utilizadas na arvore
+        for i in range(len(tabela)-1):
             for j in range(len(tabela[i])):
+                print("Nodo testado")
+                print(str(i) + ' ' + str(j))
                 posProds = [] #possiveis producoes a serem selecionadas
                 k = len(tabela)-2
                 posDX = i+1
                 posDY = j+1
                 while k != i:
+                    print("K")
+                    print(str(k) + ' ' + str(j))
                     for var1 in tabela[k][j]:
+                        print("D")
+                        print(str(posDX) + ' ' + str(posDY))
                         for var2 in tabela[posDX][posDY]:
                             for prod in self.regras:
                                 if prod[1] == var1 and prod[2] == var2: #and len(prod) == 2 nao precisa pois ja na forma normal
-                                    if prod[0] not in posProds:
+                                    if prod not in posProds:
                                         posProds.append(prod)
                     print(posProds)
-                    arvore.append(posProds)
+                    if posProds not in arvore:
+                        arvore.append(posProds)
                     posDX+=1
                     posDY+=1
-                    k+=1 
-        print(posProds)
-        
+                    k-=1 
+        #adiciona todas producoes de terminais possivelmente utilizadas na arvore
+        for prod in self.regras:
+            for posProds in arvore:
+                for posProd in posProds:
+                    if prod[1] in base and prod[0] in posProd[1:]:
+                        if prod not in arvore:
+                            arvore.append(prod)
+        for item in arvore:
+            print(item)
+                
         
     def cyk(self, entrada):
         aceita = 0
@@ -337,8 +353,8 @@ class gramatica(object):
 
         if aceita:
             print("Entrada aceita")
-            self.geraArvoreDerivacao(tabela)
-            pt(tabela)
+            self.geraArvoreDerivacao(tabela, base)
+            #pt(tabela)
         else:
             print("Entrada rejeitada")
 
