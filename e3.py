@@ -259,14 +259,13 @@ class gramatica(object):
 
 
     def geraArvoreDerivacao(self, tabela, base):
-        arvore = []
-        
+        posProds = []
         #junta todas producoes de variaveis possivelmente utilizadas na arvore
         for i in range(len(tabela)-1):
             for j in range(len(tabela[i])):
                 print("Nodo testado")
                 print(str(i) + ' ' + str(j))
-                posProds = [] #possiveis producoes a serem selecionadas
+                pProds = [] #possiveis producoes a serem selecionadas
                 k = len(tabela)-2
                 posDX = i+1
                 posDY = j+1
@@ -279,26 +278,33 @@ class gramatica(object):
                         for var2 in tabela[posDX][posDY]:
                             for prod in self.regras:
                                 if prod[1] == var1 and prod[2] == var2: #and len(prod) == 2 nao precisa pois ja na forma normal
-                                    if prod not in posProds:
-                                        posProds.append(prod)
-                    print(posProds)
-                    if posProds not in arvore:
-                        arvore.append(posProds)
+                                    if prod not in pProds:
+                                        pProds.append(prod)
+                    print(pProds)
+                    if pProds not in posProds:
+                        posProds.append(pProds)
                     posDX+=1
                     posDY+=1
                     k-=1 
-        #adiciona todas producoes de terminais possivelmente utilizadas na arvore
+        #adiciona todas producoes de terminais possivelmente utilizadas na arvore e limpa lista
+        temp = []
+        for pProd in posProds:
+            for prod in pProd:
+                temp.append(prod)
         for prod in self.regras:
-            for posProds in arvore:
-                for posProd in posProds:
+            for pProds in posProds:
+                for posProd in pProds:
                     if prod[1] in base and prod[0] in posProd[1:]:
-                        if prod not in arvore:
-                            arvore.append(prod)
-        for item in arvore:
+                        if prod not in posProds:
+                            temp.append(prod)
+        posProds = temp
+        #filtra producoes de terminais
+        for item in posProds:
             print(item)
-                
         
-    def cyk(self, entrada):
+        
+        
+    def parserCYK(self, entrada):
         aceita = 0
         def pt(tabela):
             for linha in tabela:
@@ -364,5 +370,5 @@ if __name__ == "__main__":
 #    blabla.leGramatica("gramatica_exemplo1.txt")
 #    blabla.defFormal()
     blabla.djowsky()
-    blabla.cyk("dog runs in the park")
-#    blabla.parser("a a b a")
+    blabla.parserCYK("dog runs in the park")
+#    blabla.parserCYK("a a b a")
