@@ -1,4 +1,5 @@
 import itertools as it
+import numpy as np
 
 class gramatica(object):
     def __init__(self):
@@ -353,15 +354,17 @@ class gramatica(object):
                    posDX+=1
                    posDY+=1
                    k-=1      
-        
+        #muda var de aceita/rejeita de acordo com matriz resultante
         if self.inicial in tabela[0][0]:
             aceita = 1
-
+        #embeleza matriz resultante
+#        printavel = it.chain.from_iterable(it.izip_longest(*(x.splitlines() for x in y), fillvalue='') for y in tabela)
+        #imprime resultado e chama criacao da arvore de derivacao 
         if aceita:
-            print("Entrada aceita")
+            pt(tabela)
             self.geraArvoreDerivacao(tabela, base)
-            #pt(tabela)
         else:
+            pt(tabela)
             print("Entrada rejeitada")
 
 if __name__ == "__main__":
