@@ -287,7 +287,7 @@ class gramatica(object):
                         posProds.append(pProds)
                     posDX+=1
                     posDY+=1
-                    k-=1 
+                    k-=1
         #adiciona todas producoes de terminais possivelmente utilizadas na arvore e limpa lista
         temp = []
         for pProd in posProds:
@@ -301,10 +301,10 @@ class gramatica(object):
                         if prod not in posProds and prod not in temp:
                             temp.append(prod)
         posProds = temp
-        
+
         for item in posProds:
             print(item)
-        
+
         arvores = [[] for x in range(99)]
         """
         #filtra producoes de terminais
@@ -316,19 +316,19 @@ class gramatica(object):
         """
         #gera arvores por derivação a esquerda
         tam = -1
-        
-        IarvoreAtual = 0    #indice da arvore 
+
+        IarvoreAtual = 0    #indice da arvore
         IprodAtual = 0      #indice da producao analisada
         IvarAtual = 1       #indice da variavel analisada
         arvores[IarvoreAtual] = [posProds[0]]
         varAtual = arvores[IarvoreAtual][IprodAtual][IvarAtual]
-        
+
         while tam != len(arvores):
             tam = len(arvores)
             for prod in posProds:
                 pass
-                
-            
+
+
     def parserCYK(self, entrada):
         aceita = 0
         def pt(tabela):
@@ -359,10 +359,10 @@ class gramatica(object):
                     if tabela[len(tabela)-1][j] in prod[1:]:
                         novaCelula.append(prod[0])
                 tabela[i][j] = novaCelula
-                
+
         #preenche o resto da tabela com os geradores das linhas abaixo
-        for i in reversed(range(len(base)-1)):    
-            for j in range(len(tabela[i])): 
+        for i in reversed(range(len(base)-1)):
+            for j in range(len(tabela[i])):
                prods = []
                k = len(tabela)-2
                posDX = i+1
@@ -377,14 +377,14 @@ class gramatica(object):
                    tabela[i][j] = prods
                    posDX+=1
                    posDY+=1
-                   k-=1      
+                   k-=1
         #muda var de aceita/rejeita de acordo com matriz resultante
         if self.inicial in tabela[0][0]:
             aceita = 1
         #embeleza matriz resultante
  #       printavel = np.matrix(tabela)
  #       print(pd.DataFrame(printavel))
-        #imprime resultado e chama criacao da arvore de derivacao 
+        #imprime resultado e chama criacao da arvore de derivacao
         if aceita:
             pt(tabela)
             self.geraArvoreDerivacao(tabela, base)
@@ -394,7 +394,7 @@ class gramatica(object):
 
 if __name__ == "__main__":
     blabla = gramatica()
-    blabla.leGramatica("gramatica_exemplo2.txt")    
+    blabla.leGramatica("gramatica_exemplo2.txt")
 #    blabla.leGramatica("gramatica_exemplo1.txt")
 #    blabla.defFormal()
     blabla.djowsky()
