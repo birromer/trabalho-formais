@@ -1,6 +1,14 @@
 import itertools as it
 #import numpy as np
 #import pandas as pd
+import copy
+
+class nodo(object):
+    def __init__(self, selfie, esq=None, dire=None):
+        self.selfie = selfie
+        self.esq = esq
+        self.dire = dire
+
 
 class gramatica(object):
     def __init__(self):
@@ -265,24 +273,17 @@ class gramatica(object):
         #junta todas producoes de variaveis possivelmente utilizadas na arvore
         for i in range(len(tabela)-1):
             for j in range(len(tabela[i])):
-#                print("Nodo testado")
-#                print(str(i) + ' ' + str(j))
                 pProds = [] #possiveis producoes a serem selecionadas
                 k = len(tabela)-2
                 posDX = i+1
                 posDY = j+1
                 while k != i:
-#                    print("K")
-#                    print(str(k) + ' ' + str(j))
                     for var1 in tabela[k][j]:
-#                        print("D")
-#                        print(str(posDX) + ' ' + str(posDY))
                         for var2 in tabela[posDX][posDY]:
                             for prod in self.regras:
                                 if prod[1] == var1 and prod[2] == var2: #and len(prod) == 2 nao precisa pois ja na forma normal
                                     if prod not in pProds:
                                         pProds.append(prod)
-#                    print(pProds)
                     if pProds not in posProds:
                         posProds.append(pProds)
                     posDX+=1
@@ -305,60 +306,66 @@ class gramatica(object):
         for item in posProds:
             print(item)
 
-        posArvores = [[] for x in range(99)]
+
+        posArvores = []
         
+        for prod in posProds:
+            if prod[0] == self.inicial:
+                raiz = nodo(prod)
+                posArvores.append(raiz)
         
-        def procuraProxLivre(posArvores, i, prodTestada):
-            j = i+1
-            temQueIrParaProx = 0
-            while j < len(posArvores):
-                for prod in posArvores[i]:
-                    if prodTestada[1] in prod:
-                        temQueIrParaProx = 1
-                        procuraProxLivre(posArvores, j, prodTestada)
-                if temQueIrParaProx == 0:
-                    return j
-        
-        i=0
-        temQueIrParaProx = 0
-        foiParaProx=0
-        proxParaOndeFoi= -1
-        #filtra producoes de terminais
-        while(i<len(posArvores)):
-            for terminal in base:
+        def compAr(raiz, posProds):
+            for raiz in posArvores:
+                f=0
                 for prod in posProds:
-                    if prod[1] == terminal:
-                        for aprod in posArvores[i]:
-                            if prod[1]  in aprod:
-                                temQueIrParaProx = 1
-                        if temQueIrParaProx == 0:
-                            posArvores[i].append(prod)
-                        else:
-                            temQueIrParaProx = 0
-                            foiParaProx = 1
+                    if prod[0] == raiz.selfie[1] and f==0:
+                        esqu = nodo(prod)
+                        raiz.esq = esqu
+                        f = 1
+                    f=0
+                    for prod in posProds:
+                        if prod[0] == raiz.selfie[2] and f == 0:
+                            dire = nodo(prod)
+                            raiz.dir = dire
+                    f = 1
+            compAr(raiz.esq, posProds)
+            compAr(raiz.dir, posProds)
+            
+        
+
+                
+# =============================================================================
+#         def procuraProxLivre(posArvores, i, prodTestada):
+#             j = i+1
+#             temQueIrParaProx = 0
+#             while j < len(posArvores):
+#                 for prod in posArvores[i]:
+#                     if prodTestada[1] in prod:
+#                         temQueIrParaProx = 1
+#                         procuraProxLivre(posArvores, j, prodTestada)
+#                 if temQueIrParaProx == 0:
+#                     return j
+#         
+#         i=0
+#         temQueIrParaProx = 0
+#         foiParaProx=0
+#         proxParaOndeFoi= -1
+#         #filtra producoes de terminais
+#         while(i<len(posArvores)):
+#             for terminal in base:
+#                 for prod in posProds:
+#                     if prod[1] == terminal:
+#                         for aprod in posArvores[i]:
+#                             if prod[1]  in aprod:
+#                                 temQueIrParaProx = 1
+#                         if temQueIrParaProx == 0:
+#                             posArvores[i].append(prod)
+#                         else:
+#                             temQueIrParaProx = 0
+#                             foiParaProx = 1
+# =============================================================================
                             
                                         
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-# =============================================================================
-#         #gera arvores por derivação a esquerda
-#         tam = -1
-# 
-#         IarvoreAtual = 0    #indice da arvore
-#         IprodAtual = 0      #indice da producao analisada
-#         IvarAtual = 1       #indice da variavel analisada
-#         arvores[IarvoreAtual] = [posProds[0]]
-#         varAtual = arvores[IarvoreAtual][IprodAtual][IvarAtual]
-# =============================================================================
-
-
-
     def parserCYK(self, entrada):
         aceita = 0
         def pt(tabela):
