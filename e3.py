@@ -386,7 +386,9 @@ class gramatica(object):
  #       print(pd.DataFrame(printavel))
         #imprime resultado e chama criacao da arvore de derivacao
         if aceita:
+            print("Entrada aceita")
             pt(tabela)
+            #print(pt.DataFrame(tabela))
             self.geraArvoreDerivacao(tabela, base)
         else:
             pt(tabela)
@@ -394,9 +396,9 @@ class gramatica(object):
 
 if __name__ == "__main__":
     blabla = gramatica()
-    blabla.leGramatica("gramatica_exemplo2.txt")
-#    blabla.leGramatica("gramatica_exemplo1.txt")
+  #  blabla.leGramatica("gramatica_exemplo2.txt")
+    blabla.leGramatica("gramatica_exemplo1.txt")
 #    blabla.defFormal()
     blabla.djowsky()
-    blabla.parserCYK("dog runs in the park")
-#    blabla.parserCYK("a a b a")
+#    blabla.parserCYK("dog runs in the park")aa
+    blabla.parserCYK("a a b a")
