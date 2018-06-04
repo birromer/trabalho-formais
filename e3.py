@@ -300,33 +300,63 @@ class gramatica(object):
                     if prod[1] in base and prod[0] in posProd[1:]:
                         if prod not in posProds and prod not in temp:
                             temp.append(prod)
-        posProds = temp
-
+        posProds = temp.copy()
+    
         for item in posProds:
             print(item)
 
-        arvores = [[] for x in range(99)]
-        """
-        #filtra producoes de terminais
+        posArvores = [[] for x in range(99)]
+        
+        
+        def procuraProxLivre(posArvores, i, prodTestada):
+            j = i+1
+            temQueIrParaProx = 0
+            while j < len(posArvores):
+                for prod in posArvores[i]:
+                    if prodTestada[1] in prod:
+                        temQueIrParaProx = 1
+                        procuraProxLivre(posArvores, j, prodTestada)
+                if temQueIrParaProx == 0:
+                    return j
+        
         i=0
-        for terminal in base:
-            for prod in posProds:
-                if prod[1] == terminal:
-                    arvores[i].append(prod)
-        """
-        #gera arvores por derivação a esquerda
-        tam = -1
+        temQueIrParaProx = 0
+        foiParaProx=0
+        proxParaOndeFoi= -1
+        #filtra producoes de terminais
+        while(i<len(posArvores)):
+            for terminal in base:
+                for prod in posProds:
+                    if prod[1] == terminal:
+                        for aprod in posArvores[i]:
+                            if prod[1]  in aprod:
+                                temQueIrParaProx = 1
+                        if temQueIrParaProx == 0:
+                            posArvores[i].append(prod)
+                        else:
+                            temQueIrParaProx = 0
+                            foiParaProx = 1
+                            
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+# =============================================================================
+#         #gera arvores por derivação a esquerda
+#         tam = -1
+# 
+#         IarvoreAtual = 0    #indice da arvore
+#         IprodAtual = 0      #indice da producao analisada
+#         IvarAtual = 1       #indice da variavel analisada
+#         arvores[IarvoreAtual] = [posProds[0]]
+#         varAtual = arvores[IarvoreAtual][IprodAtual][IvarAtual]
+# =============================================================================
 
-        IarvoreAtual = 0    #indice da arvore
-        IprodAtual = 0      #indice da producao analisada
-        IvarAtual = 1       #indice da variavel analisada
-        arvores[IarvoreAtual] = [posProds[0]]
-        varAtual = arvores[IarvoreAtual][IprodAtual][IvarAtual]
-
-        while tam != len(arvores):
-            tam = len(arvores)
-            for prod in posProds:
-                pass
 
 
     def parserCYK(self, entrada):
@@ -359,7 +389,6 @@ class gramatica(object):
                     if tabela[len(tabela)-1][j] in prod[1:]:
                         novaCelula.append(prod[0])
                 tabela[i][j] = novaCelula
-
         #preenche o resto da tabela com os geradores das linhas abaixo
         for i in reversed(range(len(base)-1)):
             for j in range(len(tabela[i])):
@@ -388,6 +417,7 @@ class gramatica(object):
         if aceita:
             print("Entrada aceita")
             pt(tabela)
+            print('\n')
             #print(pt.DataFrame(tabela))
             self.geraArvoreDerivacao(tabela, base)
         else:
@@ -396,9 +426,9 @@ class gramatica(object):
 
 if __name__ == "__main__":
     blabla = gramatica()
-  #  blabla.leGramatica("gramatica_exemplo2.txt")
-    blabla.leGramatica("gramatica_exemplo1.txt")
+    blabla.leGramatica("gramatica_exemplo2.txt")
+#    blabla.leGramatica("gramatica_exemplo1.txt")
 #    blabla.defFormal()
     blabla.djowsky()
-#    blabla.parserCYK("dog runs in the park")aa
-    blabla.parserCYK("a a b a")
+    blabla.parserCYK("dog runs in the park")
+#    blabla.parserCYK("a a b a")
