@@ -3,13 +3,6 @@ import itertools as it
 #import pandas as pd
 import copy
 
-class nodo(object):
-    def __init__(self, selfie, esq=None, dire=None):
-        self.selfie = selfie
-        self.esq = esq
-        self.dire = dire
-
-
 class gramatica(object):
     def __init__(self):
         self.terminais = []
@@ -304,45 +297,66 @@ class gramatica(object):
         posProds = temp.copy()
         for item in posProds:
             print(item)
-        
-        
-        arvores = []*999
+
+        arvores = [[[] for y in range(10)] for x in range(10)]
+        arvores[0][0] = posProds[0]
         indAr = 0
-        
+
+        def pa(arvores):
+            for arvore in arvores:
+                print(arvore)
+        pa(arvores)
+
         i = 0
-        while i < indAr:
+        while i <= indAr:
             folhas = 0
-            j = len(arvores[i])
+            j = 0
+            print(j)
             while j < len(arvores[i]) + 1:
-                if len(arvores[i]) == 3:
+                print("oi")
+                if len(arvores[i][j]) == 3:
                     x = i
                     preenchido = 0
                     for prod in posProds:
+                        print("Prod testada")
+                        print(prod)
                         if arvores[i][j][1] == prod[0] and preenchido == 0:
                             arvores[x][((j+1)*2)-1] = prod
                             preenchido = 1
                             x= indAr + 1
                             indAr += 1
-                        if arvores[i][j][1] == prod[0] and preenchido == 1:
-                            arvores[x] = arvores[i][j]
+                            print("k1")
+                            pa(arvores)
+                        elif arvores[i][j][1] == prod[0] and preenchido == 1:
+                            arvores[x] = arvores[i][:]
                             arvores[x][((j+1)*2)-1] = prod
                             x=x+1
+                            indAr += 1
+                            print("k2")
+                            pa(arvores)
                     preenchido = 0
                     for prod in posProds:
+                        print("Prod testada")
+                        print(prod)
                         if arvores[i][j][2] == prod[0] and preenchido == 0:
                             arvores[x][((j+1)*2)] = prod
                             preenchido = 1
                             x = indAr + 1
                             indAr += 1
-                        if arvores[i][j][2] == prod[0] and preenchido == 1:
-                            arvores[x] = arvores[i][j]
+                            print("k3")
+                            pa(arvores)
+                        elif arvores[i][j][2] == prod[0] and preenchido == 1:
+                            arvores[x] = arvores[i][:]
                             arvores[x][((j+1)*2)] = prod
                             x=x+1
+                            indAr += 1
+                            print("k4")
+                            pa(arvores)
                 j=j+1
             i=i+1
-            
+
             print(arvores)
-                
+
 
 
     def parserCYK(self, entrada):
