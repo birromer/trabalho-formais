@@ -33,7 +33,7 @@ class gramatica(object):
         #   print(prod)
 
 
-    def leGramatica(self, nomeArquivo):
+     def leGramatica(self, nomeArquivo):
         with open(nomeArquivo,"r") as arq:
             conteudo= arq.read().splitlines()
         for i in range(0,conteudo.index("#Regras")):
@@ -302,18 +302,18 @@ class gramatica(object):
                         if prod not in posProds and prod not in temp:
                             temp.append(prod)
         posProds = temp.copy()
-    
+
         for item in posProds:
             print(item)
 
 
         posArvores = []
-        
+        """
         for prod in posProds:
             if prod[0] == self.inicial:
                 raiz = nodo(prod)
                 posArvores.append(raiz)
-        
+
         def compAr(raiz, posProds):
             for raiz in posArvores:
                 f=0
@@ -330,10 +330,10 @@ class gramatica(object):
                     f = 1
             compAr(raiz.esq, posProds)
             compAr(raiz.dir, posProds)
-            
-        
+        """
 
-                
+
+"""
 # =============================================================================
 #         def procuraProxLivre(posArvores, i, prodTestada):
 #             j = i+1
@@ -345,7 +345,7 @@ class gramatica(object):
 #                         procuraProxLivre(posArvores, j, prodTestada)
 #                 if temQueIrParaProx == 0:
 #                     return j
-#         
+#
 #         i=0
 #         temQueIrParaProx = 0
 #         foiParaProx=0
@@ -364,9 +364,8 @@ class gramatica(object):
 #                             temQueIrParaProx = 0
 #                             foiParaProx = 1
 # =============================================================================
-                            
-                                        
-    def parserCYK(self, entrada):
+"""
+   def parserCYK(self, entrada):
         aceita = 0
         def pt(tabela):
             for linha in tabela:

@@ -304,9 +304,45 @@ class gramatica(object):
         posProds = temp.copy()
         for item in posProds:
             print(item)
-
-
-
+        
+        
+        arvores = []*999
+        indAr = 0
+        
+        i = 0
+        while i < indAr:
+            folhas = 0
+            j = len(arvores[i])
+            while j < len(arvores[i]) + 1:
+                if len(arvores[i]) == 3:
+                    x = i
+                    preenchido = 0
+                    for prod in posProds:
+                        if arvores[i][j][1] == prod[0] and preenchido == 0:
+                            arvores[x][((j+1)*2)-1] = prod
+                            preenchido = 1
+                            x= indAr + 1
+                            indAr += 1
+                        if arvores[i][j][1] == prod[0] and preenchido == 1:
+                            arvores[x] = arvores[i][j]
+                            arvores[x][((j+1)*2)-1] = prod
+                            x=x+1
+                    preenchido = 0
+                    for prod in posProds:
+                        if arvores[i][j][2] == prod[0] and preenchido == 0:
+                            arvores[x][((j+1)*2)] = prod
+                            preenchido = 1
+                            x = indAr + 1
+                            indAr += 1
+                        if arvores[i][j][2] == prod[0] and preenchido == 1:
+                            arvores[x] = arvores[i][j]
+                            arvores[x][((j+1)*2)] = prod
+                            x=x+1
+                j=j+1
+            i=i+1
+            
+            print(arvores)
+                
 
 
     def parserCYK(self, entrada):
