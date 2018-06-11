@@ -28,7 +28,7 @@ class gramatica(object):
         for i in range(len(self.regras)):
             self.regras[i] = self.regras[i].split(' ')
         if '' in self.regras[-1]:
-            self.regras[-1].remove('')
+                        self.regras[-1].remove('')
         #for prod in self.regras:
         #   print(prod)
 
@@ -302,70 +302,13 @@ class gramatica(object):
                         if prod not in posProds and prod not in temp:
                             temp.append(prod)
         posProds = temp.copy()
-    
         for item in posProds:
             print(item)
 
 
-        posArvores = []
-        
-        for prod in posProds:
-            if prod[0] == self.inicial:
-                raiz = nodo(prod)
-                posArvores.append(raiz)
-        
-        def compAr(raiz, posProds):
-            for raiz in posArvores:
-                f=0
-                for prod in posProds:
-                    if prod[0] == raiz.selfie[1] and f==0:
-                        esqu = nodo(prod)
-                        raiz.esq = esqu
-                        f = 1
-                    f=0
-                    for prod in posProds:
-                        if prod[0] == raiz.selfie[2] and f == 0:
-                            dire = nodo(prod)
-                            raiz.dir = dire
-                    f = 1
-            compAr(raiz.esq, posProds)
-            compAr(raiz.dir, posProds)
-            
-        
 
-                
-# =============================================================================
-#         def procuraProxLivre(posArvores, i, prodTestada):
-#             j = i+1
-#             temQueIrParaProx = 0
-#             while j < len(posArvores):
-#                 for prod in posArvores[i]:
-#                     if prodTestada[1] in prod:
-#                         temQueIrParaProx = 1
-#                         procuraProxLivre(posArvores, j, prodTestada)
-#                 if temQueIrParaProx == 0:
-#                     return j
-#         
-#         i=0
-#         temQueIrParaProx = 0
-#         foiParaProx=0
-#         proxParaOndeFoi= -1
-#         #filtra producoes de terminais
-#         while(i<len(posArvores)):
-#             for terminal in base:
-#                 for prod in posProds:
-#                     if prod[1] == terminal:
-#                         for aprod in posArvores[i]:
-#                             if prod[1]  in aprod:
-#                                 temQueIrParaProx = 1
-#                         if temQueIrParaProx == 0:
-#                             posArvores[i].append(prod)
-#                         else:
-#                             temQueIrParaProx = 0
-#                             foiParaProx = 1
-# =============================================================================
-                            
-                                        
+
+
     def parserCYK(self, entrada):
         aceita = 0
         def pt(tabela):
