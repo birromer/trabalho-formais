@@ -298,7 +298,7 @@ class gramatica(object):
         for item in posProds:
             print(item)
 
-        arvores = [[[] for y in range(10)] for x in range(10)]
+        arvores = [[[] for y in range(20)] for x in range(30)]
         arvores[0][0] = posProds[0]
         indAr = 0
 
@@ -335,13 +335,14 @@ class gramatica(object):
                             print("k2")
                             pa(arvores)
                     preenchido = 0
+                    x = i
                     for prod in posProds:
                         print("Prod testada")
                         print(prod)
                         if arvores[i][j][2] == prod[0] and preenchido == 0:
                             arvores[x][((j+1)*2)] = prod
                             preenchido = 1
-                            x = indAr + 1
+                            x = indAr
                             indAr += 1
                             print("k3")
                             pa(arvores)
