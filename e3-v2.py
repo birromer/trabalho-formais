@@ -262,6 +262,23 @@ class gramatica(object):
 
 
     def geraArvoreDerivacao(self, tabela, base):
+
+        def numeroFolhas(arvore):
+            ultimoInd = 0
+            for i in range(len(arvore)):
+                if arvore[i] != []:
+                    ultimoInd = i
+                    print(UltimoInd)
+            return ultimoInd//2 + 1
+        
+        def pa(arvore):
+            tamLinha = 1
+            for i in range(numeroFolhas(arvore)*2+1):
+                print(arvore[i])
+                if i == tamLinha:
+                    print('\n')
+                    tamLinha*=2
+     
         posProds = []
         #junta todas producoes de variaveis possivelmente utilizadas na arvore
         for i in range(len(tabela)-1):
@@ -298,20 +315,23 @@ class gramatica(object):
         for item in posProds:
             print(item)
 
-        arvores = [[[] for y in range(20)] for x in range(30)]
+        arvores = [[[] for y in range(50)] for x in range(50)]
+
         arvores[0][0] = posProds[0]
+
         indAr = 0
 
-        def pa(arvores):
-            for arvore in arvores:
-                print(arvore)
-        pa(arvores)
+        #pa(arvores)
+
+
+                
 
         i = 0
         while i <= indAr:
             folhas = 0
             j = 0
             print(j)
+            print('\n')
             while j < len(arvores[i]) + 1:
                 print("oi")
                 if len(arvores[i][j]) == 3:
@@ -325,15 +345,21 @@ class gramatica(object):
                             preenchido = 1
                             x= indAr + 1
                             indAr += 1
+                            if numeroFolhas(arvores[x]) > len(base):
+                                break
                             print("k1")
-                            pa(arvores)
+                            pa(arvores[x])
+                            print('\n')
                         elif arvores[i][j][1] == prod[0] and preenchido == 1:
                             arvores[x] = arvores[i][:]
                             arvores[x][((j+1)*2)-1] = prod
                             x=x+1
                             indAr += 1
+                            if numeroFolhas(arvores[x]) > len(base):
+                                break
                             print("k2")
-                            pa(arvores)
+                            pa(arvores[x])
+                            print('\n')
                     preenchido = 0
                     x = i
                     for prod in posProds:
@@ -344,15 +370,21 @@ class gramatica(object):
                             preenchido = 1
                             x = indAr
                             indAr += 1
+                            if numeroFolhas(arvores[x]) > len(base):
+                                break
                             print("k3")
-                            pa(arvores)
+                            pa(arvores[x])
+                            print('\n')
                         elif arvores[i][j][2] == prod[0] and preenchido == 1:
                             arvores[x] = arvores[i][:]
                             arvores[x][((j+1)*2)] = prod
                             x=x+1
                             indAr += 1
+                            if numeroFolhas(arvores[x]) > len(base):
+                                break
                             print("k4")
-                            pa(arvores)
+                            pa(arvores[x])
+                            print('\n')
                 j=j+1
             i=i+1
 
