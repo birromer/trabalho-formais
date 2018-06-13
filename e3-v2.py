@@ -266,14 +266,18 @@ class gramatica(object):
         def numeroFolhas(arvore):
             ultimoInd = 0
             for i in range(len(arvore)):
-                if arvore[i] != []:
+                #print(arvore[i])
+                if len(arvore[i]) > 0:
                     ultimoInd = i
-                    print(UltimoInd)
+                    print(ultimoInd)
             return ultimoInd//2 + 1
         
         def pa(arvore):
+            print("kkeaemen")
             tamLinha = 1
-            for i in range(numeroFolhas(arvore)*2+1):
+            print("posicao do ultimo nodo = ")
+            print((numeroFolhas(arvore)) * 2)
+            for i in range(numeroFolhas(arvore)*2 + 1):
                 print(arvore[i])
                 if i == tamLinha:
                     print('\n')
@@ -330,6 +334,9 @@ class gramatica(object):
         while i <= indAr:
             folhas = 0
             j = 0
+            
+            pa(arvores[0])
+            
             print(j)
             print('\n')
             while j < len(arvores[i]) + 1:
@@ -388,7 +395,9 @@ class gramatica(object):
                 j=j+1
             i=i+1
 
-            print(arvores)
+#            print(arvores)
+
+            
 
 
 
