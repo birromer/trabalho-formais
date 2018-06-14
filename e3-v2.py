@@ -298,13 +298,11 @@ class gramatica(object):
                     naoVazios += 1
                     #print(ultimoInd)
             #return ultimoInd//2 + 1
-            h = round(log2(i)+1)
+            h = round(log2(ultimoInd)+1)
             v = 2**h - naoVazios - 1
-            return log2(2**h -1 - v)
+            return round(log2(2**h -1 - v))+1
             
-        
-        
-        
+       
         def pt(arvore):
             print("kkeaemen")
             tamLinha = 1
@@ -321,6 +319,15 @@ class gramatica(object):
                 print(arvore)
                 print('\n')
                 
+        def jaFalhou(arvore):
+            finais = []
+            for i in range(len(arvore)):
+                if arvore[1] in self.terminais:
+                    finais.append(arvore[1])
+            for i in range(len(finais)):
+                if finais[i] != base[i]:
+                    return False
+            return True
      
         posProds = []
         #junta todas producoes de variaveis possivelmente utilizadas na arvore
@@ -358,9 +365,8 @@ class gramatica(object):
         for item in posProds:
             print(item)
 
-        arvores = [[[] for y in range(2**len(base))] for x in range(20)]
+        arvores = [[[] for y in range(2**(len(base)+1))] for x in range(50)]
         arvoresNice = []
-        
         
         indAr = 0
         for prod in posProds:
@@ -390,10 +396,9 @@ class gramatica(object):
                                 if arvores[i][((j+1)*2)-1] == []:
                                     arTemp = arvores[i][:]
                                     arTemp[((j+1)*2)-1] = prod
-                                    if arTemp not in arvores:
+                                    if arTemp not in arvores and numeroFolhas(arTemp) <= len(base):
                                         arvores[i][((j+1)*2)-1] = prod
                                         preenchido = 1
-    
                                 print("indAr = " + str(indAr))
                                 print("k1")
                                 print(numeroFolhas(arvores[i]))
@@ -401,11 +406,14 @@ class gramatica(object):
                                 print('\n')
                             if numeroFolhas(arvores[i]) > len(base):
                                 break
-                            elif numeroFolhas(arvores[i]) == len(base):
-                                if verificaFim(arvores[i]):
-                                    if arvores[i] not in arvoresNice:
-                                        arvoresNice.append(arvores[i])
-                                        break        
+                            #elif numeroFolhas(arvores[i]) == len(base):
+                            if verificaFim(arvores[i]):
+                                if arvores[i] not in arvoresNice:
+                                    arvoresNice.append(arvores[i])
+                                    print("DEU BOM1")
+                                    print(arvores[i])
+                                    input("aeee")
+                                    break        
                             
                         elif arvores[i][j][1] == prod[0] and preenchido == 1:
                             if ((j+1)*2)-1 < 2**len(base):
@@ -417,13 +425,16 @@ class gramatica(object):
                                 print(str(numeroFolhas(arvores[indAr-1])))
                                 pa(arvores)
                                 print('\n')
-                            if numeroFolhas(arvores[indAr-1]) > len(base):
+                            if numeroFolhas(arvores[indAr]) > len(base):
                                 break
-                            elif numeroFolhas(arvores[i]) == len(base):
-                                if verificaFim(arvores[i]):
-                                    if arvores[i] not in arvoresNice:
-                                        arvoresNice.append(arvores[i])
-                                        break
+                            #elif numeroFolhas(arvores[i]) == len(base):
+                            if verificaFim(arvores[i]):
+                                if arvores[i] not in arvoresNice:
+                                    arvoresNice.append(arvores[i])
+                                    print("DEU BOM2")
+                                    print(arvores[i])
+                                    input("aeee")
+                                    break
                             
                     preenchido = 0
                     for prod in posProds:
@@ -446,11 +457,14 @@ class gramatica(object):
                                 print('\n')
                             if numeroFolhas(arvores[i]) > len(base):
                                 break
-                            elif numeroFolhas(arvores[i]) == len(base):
-                                if verificaFim(arvores[i]):
-                                    if arvores[i] not in arvoresNice:
-                                        arvoresNice.append(arvores[i])
-                                        break
+                            #elif numeroFolhas(arvores[i]) == len(base):
+                            if verificaFim(arvores[i]):
+                                if arvores[i] not in arvoresNice:
+                                    arvoresNice.append(arvores[i])
+                                    print("DEU BOM3")
+                                    print(arvores[i])
+                                    input("aeee")
+                                    break
                             
                             
                         elif arvores[i][j][2] == prod[0] and preenchido == 1:
@@ -463,19 +477,28 @@ class gramatica(object):
                                 print(str(numeroFolhas(arvores[indAr-1])))
                                 pa(arvores)
                                 print('\n')
-                            if numeroFolhas(arvores[indAr-1]) > len(base):
+                            if numeroFolhas(arvores[indAr]) > len(base):
                                 break
-                            elif numeroFolhas(arvores[i]) == len(base):
-                                if verificaFim(arvores[i]):
-                                    if arvores[i] not in arvoresNice:
-                                        arvoresNice.append(arvores[i])
-                                        break
+                            #elif numeroFolhas(arvores[i]) == len(base):
+                            if verificaFim(arvores[i]):
+                                if arvores[i] not in arvoresNice:
+                                    arvoresNice.append(arvores[i])
+                                    print("DEU BOM4")
+                                    print(arvores[i])
+                                    input("aeee")
+                                    break
                            
                 j=j+1               
             i=i+1
-
-            print(arvoresNice)
-
+        
+        
+        if arvoresNice != []:
+            print("UHULESUCESSO")
+            for arvore in arvoresNice:
+                print(arvore)
+                print('\n')
+        else:
+            print("deu ruim")
             
 
 
@@ -547,9 +570,13 @@ class gramatica(object):
 
 if __name__ == "__main__":
     blabla = gramatica()
+    blabla.leGramatica("gramatica_exemplo6.txt")
+#    blabla.leGramatica("gramatica_exemplo5.txt")
 #    blabla.leGramatica("gramatica_exemplo2.txt")
-    blabla.leGramatica("gramatica_exemplo1.txt")
+#    blabla.leGramatica("gramatica_exemplo1.txt")
 #    blabla.defFormal()
     blabla.djowsky()
+    blabla.parserCYK("x o x")
+#    blabla.parserCYK("x + x * x")
 #    blabla.parserCYK("dog runs in the park")
-    blabla.parserCYK("a a b a")
+#    blabla.parserCYK("a a b a")
