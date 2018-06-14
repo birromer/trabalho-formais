@@ -1,4 +1,5 @@
 import itertools as it
+from math import log2
 #import numpy as np
 #import pandas as pd
 import copy
@@ -288,12 +289,21 @@ class gramatica(object):
             #print("aaaaaaaaaaaa")
             #print(arvore)
             ultimoInd = 0
+            naoVazios = 0
             for i in range(len(arvore)):
                 #print(arvore[i])
                 if len(arvore[i]) > 0:
                     ultimoInd = i
+                if arvore[i] != []:
+                    naoVazios += 1
                     #print(ultimoInd)
-            return ultimoInd//2 + 1
+            #return ultimoInd//2 + 1
+            h = round(log2(i)+1)
+            v = 2**h - naoVazios - 1
+            return log2(2**h -1 - v)
+            
+        
+        
         
         def pt(arvore):
             print("kkeaemen")
@@ -361,47 +371,52 @@ class gramatica(object):
 
         i = 0
         while i <= indAr:
-            input("k")
+            #input("k")
             print("Vendo nova arvore")
             folhas = 0
             j=0
             print(i)
             print('\n')
             while j < len(arvores[i]):
-                #print("oi")
                 if len(arvores[i][j]) == 3:
                     preenchido = 0
                     for prod in posProds:
                         print("Prod testada")
                         print(prod)
                         if arvores[i][j][1] == prod[0] and preenchido == 0:
-                            print("prod a ser preenchida")
-                            print(arvores[i][((j+1)*2)-1])
-                            if arvores[i][((j+1)*2)-1] == []:
-                                arvores[i][((j+1)*2)-1] = prod
-                            preenchido = 1
-                            print("indAr = " + str(indAr))
-                            print("k1")
-                            print(numeroFolhas(arvores[i]))
-                            
+                            if ((j+1)*2)-1 < 2**len(base):
+                                print("prod a ser preenchida")
+                                print(arvores[i][((j+1)*2)-1])
+                                if arvores[i][((j+1)*2)-1] == []:
+                                    arTemp = arvores[i][:]
+                                    arTemp[((j+1)*2)-1] = prod
+                                    if arTemp not in arvores:
+                                        arvores[i][((j+1)*2)-1] = prod
+                                        preenchido = 1
+    
+                                print("indAr = " + str(indAr))
+                                print("k1")
+                                print(numeroFolhas(arvores[i]))
+                                pa(arvores)
+                                print('\n')
                             if numeroFolhas(arvores[i]) > len(base):
                                 break
                             elif numeroFolhas(arvores[i]) == len(base):
                                 if verificaFim(arvores[i]):
                                     if arvores[i] not in arvoresNice:
                                         arvoresNice.append(arvores[i])
-                                        break
-                                    
-                            pa(arvores)
-                            print('\n')
-                        elif arvores[i][j][1] == prod[0] and preenchido == 1:
-                            indAr += 1
-                            arvores[indAr] = arvores[i][:]
-                            arvores[indAr][((j+1)*2)-1] = prod
-                            print("indAr = " + str(indAr))
-                            print("k2")
-                            print(str(numeroFolhas(arvores[indAr-1])))
+                                        break        
                             
+                        elif arvores[i][j][1] == prod[0] and preenchido == 1:
+                            if ((j+1)*2)-1 < 2**len(base):
+                                indAr += 1
+                                arvores[indAr] = arvores[i][:]
+                                arvores[indAr][((j+1)*2)-1] = prod
+                                print("indAr = " + str(indAr))
+                                print("k2")
+                                print(str(numeroFolhas(arvores[indAr-1])))
+                                pa(arvores)
+                                print('\n')
                             if numeroFolhas(arvores[indAr-1]) > len(base):
                                 break
                             elif numeroFolhas(arvores[i]) == len(base):
@@ -409,22 +424,26 @@ class gramatica(object):
                                     if arvores[i] not in arvoresNice:
                                         arvoresNice.append(arvores[i])
                                         break
-                            pa(arvores)
-                            print('\n')
+                            
                     preenchido = 0
                     for prod in posProds:
                         print("Prod testada")
                         print(prod)
                         if arvores[i][j][2] == prod[0] and preenchido == 0:
-                            print("prod a ser preenchida")
-                            print(arvores[i][((j+1)*2)])
-                            if arvores[i][((j+1)*2)] == []:
-                                arvores[i][((j+1)*2)] = prod
-                            preenchido = 1
-                            print("indAr = " + str(indAr))
-                            print("k3")
-                            print(str(numeroFolhas(arvores[i])))
-                            
+                            if ((j+1)*2) < 2**len(base):
+                                print("prod a ser preenchida")
+                                print(arvores[i][((j+1)*2)])
+                                if arvores[i][((j+1)*2)] == []:
+                                    arTemp = arvores[i][:]
+                                    arTemp[((j+1)*2)] = prod
+                                    if arTemp not in arvores:
+                                        arvores[i][((j+1)*2)] = prod
+                                        preenchido = 1
+                                print("indAr = " + str(indAr))
+                                print("k3")
+                                print(str(numeroFolhas(arvores[i])))
+                                pa(arvores)
+                                print('\n')
                             if numeroFolhas(arvores[i]) > len(base):
                                 break
                             elif numeroFolhas(arvores[i]) == len(base):
@@ -433,15 +452,17 @@ class gramatica(object):
                                         arvoresNice.append(arvores[i])
                                         break
                             
-                            pa(arvores)
-                            print('\n')
+                            
                         elif arvores[i][j][2] == prod[0] and preenchido == 1:
-                            indAr += 1
-                            arvores[indAr] = arvores[i][:]
-                            arvores[indAr][((j+1)*2)] = prod
-                            print("indAr = " + str(indAr))
-                            print("k4")
-                            print(str(numeroFolhas(arvores[indAr-1])))
+                            if ((j+1)*2) < 2**len(base):
+                                indAr += 1
+                                arvores[indAr] = arvores[i][:]
+                                arvores[indAr][((j+1)*2)] = prod
+                                print("indAr = " + str(indAr))
+                                print("k4")
+                                print(str(numeroFolhas(arvores[indAr-1])))
+                                pa(arvores)
+                                print('\n')
                             if numeroFolhas(arvores[indAr-1]) > len(base):
                                 break
                             elif numeroFolhas(arvores[i]) == len(base):
@@ -449,8 +470,7 @@ class gramatica(object):
                                     if arvores[i] not in arvoresNice:
                                         arvoresNice.append(arvores[i])
                                         break
-                            pa(arvores)
-                            print('\n')
+                           
                 j=j+1               
             i=i+1
 
@@ -527,9 +547,9 @@ class gramatica(object):
 
 if __name__ == "__main__":
     blabla = gramatica()
-    blabla.leGramatica("gramatica_exemplo2.txt")
-#    blabla.leGramatica("gramatica_exemplo1.txt")
+#    blabla.leGramatica("gramatica_exemplo2.txt")
+    blabla.leGramatica("gramatica_exemplo1.txt")
 #    blabla.defFormal()
     blabla.djowsky()
-    blabla.parserCYK("dog runs in the park")
-#    blabla.parserCYK("a a b a")
+#    blabla.parserCYK("dog runs in the park")
+    blabla.parserCYK("a a b a")
