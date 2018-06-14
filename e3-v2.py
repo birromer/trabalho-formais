@@ -263,16 +263,39 @@ class gramatica(object):
 
     def geraArvoreDerivacao(self, tabela, base):
 
+        def verificaFim(arvore):
+            print("aaaaaaaaaaaaaaaaa")
+            print(arvore)
+            folhas = []
+            for i in range(len(arvore)):
+                if arvore[i] != []:
+                    if arvore[i][1] in self.terminais:
+                        folhas.append(arvore[i][1])
+            print(folhas)
+            print(base)
+            if len(folhas) != len(base):
+                    print("bbbbbbbbbbabb")
+                    return False
+            else:
+                for i in range(len(base)):
+                    if folhas[i] != base[i]:
+                        print("babbbbbbbbbbb")
+                        return False
+            print("bbbbbbbbbbbba")
+            return True
+        
         def numeroFolhas(arvore):
+            #print("aaaaaaaaaaaa")
+            #print(arvore)
             ultimoInd = 0
             for i in range(len(arvore)):
                 #print(arvore[i])
                 if len(arvore[i]) > 0:
                     ultimoInd = i
-                    print(ultimoInd)
+                    #print(ultimoInd)
             return ultimoInd//2 + 1
         
-        def pa(arvore):
+        def pt(arvore):
             print("kkeaemen")
             tamLinha = 1
             print("posicao do ultimo nodo = ")
@@ -282,6 +305,12 @@ class gramatica(object):
                 if i == tamLinha:
                     print('\n')
                     tamLinha*=2
+                    
+        def pa(arvores):
+            for arvore in arvores:
+                print(arvore)
+                print('\n')
+                
      
         posProds = []
         #junta todas producoes de variaveis possivelmente utilizadas na arvore
@@ -319,83 +348,113 @@ class gramatica(object):
         for item in posProds:
             print(item)
 
-        arvores = [[[] for y in range(50)] for x in range(50)]
-
-        arvores[0][0] = posProds[0]
-
+        arvores = [[[] for y in range(2**len(base))] for x in range(20)]
+        arvoresNice = []
+        
+        
         indAr = 0
-
-        #pa(arvores)
-
-
-                
+        for prod in posProds:
+            if prod[0] == self.inicial:
+                arvores[indAr][0] = prod   
+                indAr += 1
+        indAr -=1
 
         i = 0
         while i <= indAr:
+            input("k")
+            print("Vendo nova arvore")
             folhas = 0
-            j = 0
-            
-            pa(arvores[0])
-            
-            print(j)
+            j=0
+            print(i)
             print('\n')
-            while j < len(arvores[i]) + 1:
-                print("oi")
+            while j < len(arvores[i]):
+                #print("oi")
                 if len(arvores[i][j]) == 3:
-                    x = i
                     preenchido = 0
                     for prod in posProds:
                         print("Prod testada")
                         print(prod)
                         if arvores[i][j][1] == prod[0] and preenchido == 0:
-                            arvores[x][((j+1)*2)-1] = prod
+                            print("prod a ser preenchida")
+                            print(arvores[i][((j+1)*2)-1])
+                            if arvores[i][((j+1)*2)-1] == []:
+                                arvores[i][((j+1)*2)-1] = prod
                             preenchido = 1
-                            x= indAr + 1
-                            indAr += 1
-                            if numeroFolhas(arvores[x]) > len(base):
-                                break
+                            print("indAr = " + str(indAr))
                             print("k1")
-                            pa(arvores[x])
+                            print(numeroFolhas(arvores[i]))
+                            
+                            if numeroFolhas(arvores[i]) > len(base):
+                                break
+                            elif numeroFolhas(arvores[i]) == len(base):
+                                if verificaFim(arvores[i]):
+                                    if arvores[i] not in arvoresNice:
+                                        arvoresNice.append(arvores[i])
+                                        break
+                                    
+                            pa(arvores)
                             print('\n')
                         elif arvores[i][j][1] == prod[0] and preenchido == 1:
-                            arvores[x] = arvores[i][:]
-                            arvores[x][((j+1)*2)-1] = prod
-                            x=x+1
                             indAr += 1
-                            if numeroFolhas(arvores[x]) > len(base):
-                                break
+                            arvores[indAr] = arvores[i][:]
+                            arvores[indAr][((j+1)*2)-1] = prod
+                            print("indAr = " + str(indAr))
                             print("k2")
-                            pa(arvores[x])
+                            print(str(numeroFolhas(arvores[indAr-1])))
+                            
+                            if numeroFolhas(arvores[indAr-1]) > len(base):
+                                break
+                            elif numeroFolhas(arvores[i]) == len(base):
+                                if verificaFim(arvores[i]):
+                                    if arvores[i] not in arvoresNice:
+                                        arvoresNice.append(arvores[i])
+                                        break
+                            pa(arvores)
                             print('\n')
                     preenchido = 0
-                    x = i
                     for prod in posProds:
                         print("Prod testada")
                         print(prod)
                         if arvores[i][j][2] == prod[0] and preenchido == 0:
-                            arvores[x][((j+1)*2)] = prod
+                            print("prod a ser preenchida")
+                            print(arvores[i][((j+1)*2)])
+                            if arvores[i][((j+1)*2)] == []:
+                                arvores[i][((j+1)*2)] = prod
                             preenchido = 1
-                            x = indAr
-                            indAr += 1
-                            if numeroFolhas(arvores[x]) > len(base):
-                                break
+                            print("indAr = " + str(indAr))
                             print("k3")
-                            pa(arvores[x])
+                            print(str(numeroFolhas(arvores[i])))
+                            
+                            if numeroFolhas(arvores[i]) > len(base):
+                                break
+                            elif numeroFolhas(arvores[i]) == len(base):
+                                if verificaFim(arvores[i]):
+                                    if arvores[i] not in arvoresNice:
+                                        arvoresNice.append(arvores[i])
+                                        break
+                            
+                            pa(arvores)
                             print('\n')
                         elif arvores[i][j][2] == prod[0] and preenchido == 1:
-                            arvores[x] = arvores[i][:]
-                            arvores[x][((j+1)*2)] = prod
-                            x=x+1
                             indAr += 1
-                            if numeroFolhas(arvores[x]) > len(base):
-                                break
+                            arvores[indAr] = arvores[i][:]
+                            arvores[indAr][((j+1)*2)] = prod
+                            print("indAr = " + str(indAr))
                             print("k4")
-                            pa(arvores[x])
+                            print(str(numeroFolhas(arvores[indAr-1])))
+                            if numeroFolhas(arvores[indAr-1]) > len(base):
+                                break
+                            elif numeroFolhas(arvores[i]) == len(base):
+                                if verificaFim(arvores[i]):
+                                    if arvores[i] not in arvoresNice:
+                                        arvoresNice.append(arvores[i])
+                                        break
+                            pa(arvores)
                             print('\n')
-                j=j+1
+                j=j+1               
             i=i+1
 
-#            print(arvores)
+            print(arvoresNice)
 
             
 
