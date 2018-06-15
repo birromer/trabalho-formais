@@ -327,9 +327,9 @@ class gramatica(object):
             b = 0
             for j in range(len(arvore)):
                 if arvore[j] == []:
-                    print('[]', end='   ')
+                    print('-', end='   ')
                 else:
-                    print(arvore[j], end='   ')
+                    print(arvore[j][0], end='   ')
                 b+=1
                 if b == 2**i:
                     print('\n')
@@ -447,7 +447,7 @@ class gramatica(object):
                     #repete o processo anterior mas para a derivacao a direita
                     for prod in posProds:
                         if arvores[i][j][2] == prod[0] and preenchido == 0:
-                            if ((j+1)*2) < 2**len(base):
+                            if ((j+1)*2) < 2**(len(base)+1):
                                 if arvores[i][((j+1)*2)] == []:
                                     arTemp = arvores[i][:]
                                     arTemp[((j+1)*2)] = prod
@@ -461,7 +461,7 @@ class gramatica(object):
                                     arvoresNice.append(arvores[i])
                                     break
                         elif arvores[i][j][2] == prod[0] and preenchido == 1:
-                            if ((j+1)*2) < 2**len(base):
+                            if ((j+1)*2) < 2**(len(base)+1):
                                 tempAr = arvores[i][:]
                                 tempAr[((j+1)*2)] = prod
                                 if tempAr not in arvores and numeroFolhas(tempAr) <= len(base) and jaFalhou(tempAr):
@@ -474,6 +474,13 @@ class gramatica(object):
                                 if arvores[i] not in arvoresNice:
                                     arvoresNice.append(arvores[i])
                                     break
+                elif len(arvores[i][j]) == 2:
+                    if ((j+1)*2)-1 < 2**(len(base)+1):
+                        if arvores[i][((j+1)*2)-1] == []:
+                            arvores[i][((j+1)*2)-1] = [arvores[i][j][1]]
+                    
+                    
+                    
                 j=j+1
             i=i+1
         if arvoresNice != []:
