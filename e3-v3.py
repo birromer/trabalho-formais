@@ -262,7 +262,6 @@ class gramatica(object):
 
 
     def geraArvoreDerivacao(self, tabela, base):
-
         def encontraTerminais(arvore, i, terminais):
             #retorna a lista com o terminal encontrado adicionado
             if len(arvore[i]) == 2:
@@ -322,6 +321,7 @@ class gramatica(object):
                     folhas+=1
             return folhas
 
+        """
         def pa(arvore):
             i = 0
             b = 0
@@ -346,7 +346,26 @@ class gramatica(object):
                     espacos2+=1
                     i+=1
                     b=0
-
+        """
+        
+        def pa(arvore):
+            i = 0
+            b = 0
+            h = 0
+            for j in range(len(arvore)):
+                print(' ' * int(128/((2**h)*2) - len(arvore[j])-1), end='')
+                if arvore[j] == []:
+                    print('-', end='')
+                else:
+                    print(arvore[j][0], end='')
+                b+=1
+                print(' ' * int(128/((2**h)*2)), end='')
+                if b == 2**i:
+                    print('\n')
+                    h+=1
+                    i+=1
+                    b=0            
+        
         def pt(arvores):
             for arvore in arvores:
                 print(arvore)
@@ -581,12 +600,12 @@ class gramatica(object):
 if __name__ == "__main__":
     blabla = gramatica()
 #    blabla.leGramatica("gramatica_exemplo6.txt")
-    blabla.leGramatica("gramatica_exemplo5.txt")
-#    blabla.leGramatica("gramatica_exemplo2.txt")
+#    blabla.leGramatica("gramatica_exemplo5.txt")
+    blabla.leGramatica("gramatica_exemplo2.txt")
 #    blabla.leGramatica("gramatica_exemplo1.txt")
 #    blabla.defFormal()
     blabla.djowsky()
 #    blabla.parserCYK("x o x")
-    blabla.parserCYK("x + x * x")
-#    blabla.parserCYK("dog runs in the park")
+#    blabla.parserCYK("x + x * x")
+    blabla.parserCYK("dog runs in the park")
 #    blabla.parserCYK("a a b a")
