@@ -263,15 +263,29 @@ class gramatica(object):
 
     def geraArvoreDerivacao(self, tabela, base):
 
+        def encontraTerminais(arvore, i, terminais):
+            if len(arvore[i]) == 2:
+                return terminais + [arvore[i][1]]
+            elif arvore[i] == []:
+                return terminais
+            else:
+                if ((i+1)*2) < len(arvore):
+                    return encontraTerminais(arvore, ((i+1)*2)-1, terminais) + encontraTerminais(arvore, ((i+1)*2), terminais)
+        
+        
         def verificaFim(arvore):
             print("aaaaaaaaaaaaaaaaa")
             print(arvore)
-            folhas = []
-            for i in range(len(arvore)):
-                if arvore[i] != []:
-                    if arvore[i][1] in self.terminais:
-                        folhas.append(arvore[i][1])
+            #geração da lista de folhas
+
+            folhas = encontraTerminais(arvore, 0, [])
+            print("folhas")
             print(folhas)
+            print("base")
+            print(base)
+            
+#            input("kk")            
+
             print(base)
             if len(folhas) != len(base):
                     print("bbbbbbbbbbabb")
@@ -284,24 +298,6 @@ class gramatica(object):
             print("bbbbbbbbbbbba")
             return True
         
-        def contaFolhas(arv, ind, h, soma):
-            if arv[ind] == []:
-                return 0
-            if arv[ind][1] in self.terminais:
-                return soma+1
-            if arv[ind+2**h] == [] and arv[ind+(2**h) + 1] == [] :
-                return soma+1
-            soma += contaFolhas(arv, ind+2**h, h+1, soma)
-            soma += contaFolhas(arv, ind+2**h, h+1, soma)
-            return soma
-        """
-        def numeroFolhas(arvore):
-            cont = 0
-            cont = contaFolhas(arvore, 0, 0, 0)
-            print("NUMERO FOLHAAAAAAAAAAAS")
-            print(cont)
-            return cont
-        """
         def numeroFolhas(arvore):
             #print("aaaaaaaaaaaa")
             #print(arvore)
@@ -348,6 +344,7 @@ class gramatica(object):
         
        
         def pa(arvore):
+            print(arvore)
             i = 0
             b = 0
             for j in range(len(arvore)):
@@ -360,7 +357,7 @@ class gramatica(object):
                     print('\n')
                     i+=1
                     b=0
-                
+            
                 
 # =============================================================================
 #         def pt(arvore):
@@ -649,12 +646,12 @@ class gramatica(object):
 if __name__ == "__main__":
     blabla = gramatica()
 #    blabla.leGramatica("gramatica_exemplo6.txt")
-    blabla.leGramatica("gramatica_exemplo5.txt")
+#    blabla.leGramatica("gramatica_exemplo5.txt")
 #    blabla.leGramatica("gramatica_exemplo2.txt")
-#    blabla.leGramatica("gramatica_exemplo1.txt")
+    blabla.leGramatica("gramatica_exemplo1.txt")
 #    blabla.defFormal()
     blabla.djowsky()
 #    blabla.parserCYK("x o x")
-    blabla.parserCYK("x + x * x")
+#    blabla.parserCYK("x + x * x")
 #    blabla.parserCYK("dog runs in the park")
-#    blabla.parserCYK("a a b a")
+    blabla.parserCYK("a a b a")
