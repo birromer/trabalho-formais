@@ -269,7 +269,7 @@ class gramatica(object):
             folhas = []
             for i in range(len(arvore)):
                 if arvore[i] != []:
-                    if arvore[i][1] in self.terminais:
+                    if arvore[i] in self.terminais:
                         folhas.append(arvore[i][1])
             print(folhas)
             print(base)
@@ -466,7 +466,7 @@ class gramatica(object):
                                 print("indAr = " + str(indAr))
                                 print("k1")
                                 print(numeroFolhas(arvores[i]))
-                                pa(arvores[i])
+#                                pa(arvores[i])
                                 print('\n')
                             if numeroFolhas(arvores[i]) > len(base):
                                 break
@@ -490,7 +490,7 @@ class gramatica(object):
                                     print("indAr = " + str(indAr))
                                     print("k2")
                                     print(str(numeroFolhas(arvores[indAr-1])))
-                                    pa(arvores[indAr])
+#                                    pa(arvores[indAr])
                                     print('\n')
                             if numeroFolhas(arvores[indAr]) > len(base):
                                 break
@@ -520,7 +520,7 @@ class gramatica(object):
                                 print("indAr = " + str(indAr))
                                 print("k3")
                                 print(str(numeroFolhas(arvores[i])))
-                                pa(arvores[i])
+#                                pa(arvores[i])
                                 print('\n')
                             if numeroFolhas(arvores[i]) > len(base):
                                 break
@@ -545,7 +545,7 @@ class gramatica(object):
                                     print("indAr = " + str(indAr))
                                     print("k4")
                                     print(str(numeroFolhas(arvores[indAr-1])))
-                                    pa(arvores[indAr])
+#                                    pa(arvores[indAr])
                                     print('\n')
                             if numeroFolhas(arvores[indAr]) > len(base):
                                 break
@@ -558,6 +558,9 @@ class gramatica(object):
                                     #input("aeee")
                                     break
                            
+                if len(arvores[i][j]) == 2:
+                    if ((j+1)*2-1) < 2**len(base):
+                        arvores[i][(j+1)*2-1] = [arvores[i][j][1]]
                 j=j+1               
             i=i+1
         
@@ -652,3 +655,4 @@ if __name__ == "__main__":
     blabla.parserCYK("x + x * x")
 #    blabla.parserCYK("dog runs in the park")
 #    blabla.parserCYK("a a b a")
+
