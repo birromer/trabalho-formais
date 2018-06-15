@@ -466,7 +466,7 @@ class gramatica(object):
                                 print("indAr = " + str(indAr))
                                 print("k1")
                                 print(numeroFolhas(arvores[i]))
-#                                pa(arvores[i])
+                                pt(arvores[i])
                                 print('\n')
                             if numeroFolhas(arvores[i]) > len(base):
                                 break
@@ -490,7 +490,7 @@ class gramatica(object):
                                     print("indAr = " + str(indAr))
                                     print("k2")
                                     print(str(numeroFolhas(arvores[indAr-1])))
-#                                    pa(arvores[indAr])
+                                    pt(arvores[indAr])
                                     print('\n')
                             if numeroFolhas(arvores[indAr]) > len(base):
                                 break
@@ -520,7 +520,7 @@ class gramatica(object):
                                 print("indAr = " + str(indAr))
                                 print("k3")
                                 print(str(numeroFolhas(arvores[i])))
-#                                pa(arvores[i])
+                                pt(arvores[i])
                                 print('\n')
                             if numeroFolhas(arvores[i]) > len(base):
                                 break
@@ -545,7 +545,7 @@ class gramatica(object):
                                     print("indAr = " + str(indAr))
                                     print("k4")
                                     print(str(numeroFolhas(arvores[indAr-1])))
-#                                    pa(arvores[indAr])
+                                    pt(arvores[indAr])
                                     print('\n')
                             if numeroFolhas(arvores[indAr]) > len(base):
                                 break
