@@ -325,14 +325,22 @@ class gramatica(object):
         def pa(arvore):
             i = 0
             b = 0
+            espacos1 = len(arvore)
+            espacos2 = len(arvore)
             for j in range(len(arvore)):
+                print(' '*espacos2, end='')
                 if arvore[j] == []:
+                    #print(' '* espacos1, end='')
                     print('-', end='   ')
+                    espacos1//=2
                 else:
+                    #print(' '* espacos1, end='')
                     print(arvore[j][0], end='   ')
+                    espacos1//=2
                 b+=1
                 if b == 2**i:
                     print('\n')
+                    espacos2//=2
                     i+=1
                     b=0
 
