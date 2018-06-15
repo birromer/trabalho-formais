@@ -327,8 +327,9 @@ class gramatica(object):
             b = 0
             espacos1 = len(arvore)
             espacos2 = len(arvore)
+            #print(' '*espacos2, end='')
             for j in range(len(arvore)):
-                print(' '*espacos2, end='')
+                #print(' '*espacos2, end='')
                 if arvore[j] == []:
                     #print(' '* espacos1, end='')
                     print('-', end='   ')
@@ -340,7 +341,9 @@ class gramatica(object):
                 b+=1
                 if b == 2**i:
                     print('\n')
+            #        print(' '*espacos2, end='')
                     espacos2//=2
+                    espacos2+=1
                     i+=1
                     b=0
 
@@ -506,8 +509,15 @@ class gramatica(object):
     def parserCYK(self, entrada):
         aceita = 0
         def pt(tabela):
+            for i in range(len(tabela)):
+                for j in range(len(tabela[i])):
+                    print(str(tabela[i][j]) + '\v', end='')
+            """
             for linha in tabela:
-                print(linha)
+                for var in linha:
+                    print("| " + str(var) + " |\v\v", end='')
+                print('\n')
+            """
         #separa terminais da entrada
         if ' ' in entrada:
             base = entrada.split(' ')
