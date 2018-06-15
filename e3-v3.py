@@ -263,126 +263,86 @@ class gramatica(object):
 
     def geraArvoreDerivacao(self, tabela, base):
 
+        def encontraTerminais(arvore, i, terminais):
+            #retorna a lista com o terminal encontrado adicionado
+            if len(arvore[i]) == 2:
+                return terminais + [arvore[i][1]]
+           #no caso de nao haver nodo na posicao apenas ignora o conteudo
+            elif arvore[i] == []:
+                return terminais
+            else:
+                if ((i+1)*2) < len(arvore):
+                    #dada a existencia das novas posicoes, chama recursao com filhos
+                    return encontraTerminais(arvore, ((i+1)*2)-1, terminais) + encontraTerminais(arvore, ((i+1)*2), terminais)
+
+
         def verificaFim(arvore):
-            print("aaaaaaaaaaaaaaaaa")
-            print(arvore)
-            folhas = []
-            for i in range(len(arvore)):
-                if arvore[i] != []:
-                    if arvore[i] in self.terminais:
-                        folhas.append(arvore[i][1])
-            print(folhas)
-            print(base)
+            #geração da lista de folhas
+            folhas = encontraTerminais(arvore, 0, [])
+            #ja elimina caso numero de terminais seja diferente
             if len(folhas) != len(base):
-                    print("bbbbbbbbbbabb")
                     return False
             else:
                 for i in range(len(base)):
                     if folhas[i] != base[i]:
-                        print("babbbbbbbbbbb")
                         return False
-            print("bbbbbbbbbbbba")
+            #encontra arvore funcional quando todos elementos das listas sao iguais
             return True
-        
-        def contaFolhas(arv, ind, h, soma):
-            if arv[ind] == []:
-                return 0
-            if arv[ind][1] in self.terminais:
-                return soma+1
-            if arv[ind+2**h] == [] and arv[ind+(2**h) + 1] == [] :
-                return soma+1
-            soma += contaFolhas(arv, ind+2**h, h+1, soma)
-            soma += contaFolhas(arv, ind+2**h, h+1, soma)
-            return soma
-        """
+
         def numeroFolhas(arvore):
-            cont = 0
-            cont = contaFolhas(arvore, 0, 0, 0)
-            print("NUMERO FOLHAAAAAAAAAAAS")
-            print(cont)
-            return cont
-        """
-        def numeroFolhas(arvore):
-            #print("aaaaaaaaaaaa")
-            #print(arvore)
             folhas = 0
             ultimoInd = 0
             naoVazios = 0
+            #gera numero de nodos nao vazios e indice do ultimo nodo
             for i in range(len(arvore)):
-                #print(arvore[i])
                 if len(arvore[i]) > 0:
                     ultimoInd = i
                 if arvore[i] != []:
                     naoVazios += 1
-                    #print(ultimoInd)
-            print(ultimoInd)
             for i in range(ultimoInd+1):
-                print(i)
                 if len(arvore[i]) == 3:
                     if (i+1)*2-1 >= len(arvore):
-                        print("DUAS FORA")
-                        print(arvore)
+                       #se ambos filhos estariam fora da arvore, é folha
                         folhas += 1
                     elif (i+1)*2 >= len(arvore) and (i+1)*2-1 < len(arvore):
+                        #se apenas um dos filhos se encontra fora da arvore, é folha se o outro for nulo
                         if arvore[(i+1)*2-1] == []:
-                            print("DUAS FORA")
                             folhas += 1
                     elif (i+1)*2 < len(arvore):
+                        #quando ambos filhos estao dentro da arvore
+                        #é folha ao ter ao menos um dos filhos vazio
                         if arvore[(i+1)*2-1] == [] and not arvore[(i+1)*2] == []:
-                            print("DUAS DENTRO")
                             folhas += 1
                         elif not arvore[(i+1)*2-1] == [] and arvore[(i+1)*2] == []:
-                            print("DUAS DENTRO")
                             folhas += 1
                         elif arvore[(i+1)*2-1] == [] and arvore[(i+1)*2] == []:
-                            print("DUAS DENTRO")
                             folhas += 1
                 elif len(arvore[i]) == 2:
-                    print("PROD DE TERMINAL")
+                    #todas producao de terminal sao folha
                     folhas+=1
-                else:
-                    print("NAO EH FOLHA")
-                    
-                    
-            print("NUMERO DE FOLHAAAAAAAAAAAAAAAAAAAAAAAAAAAAS")
-            print(folhas)
             return folhas
-        
-       
+
         def pa(arvore):
             i = 0
             b = 0
             for j in range(len(arvore)):
                 if arvore[j] == []:
-                    print('[]', end='   ')
+                    print('-', end='   ')
                 else:
-                    print(arvore[j], end='   ')
+                    print(arvore[j][0], end='   ')
                 b+=1
                 if b == 2**i:
                     print('\n')
                     i+=1
                     b=0
-                
-                
-# =============================================================================
-#         def pt(arvore):
-#             print("kkeaemen")
-#             tamLinha = 1
-#             print("posicao do ultimo nodo = ")
-#             print((numeroFolhas(arvore)) * 2)
-#             for i in range(numeroFolhas(arvore)*2 + 1):
-#                 print(arvore[i])
-#                 if i == tamLinha:
-#                     print('\n')
-#                     tamLinha*=2
-# =============================================================================
-                    
+
         def pt(arvores):
             for arvore in arvores:
                 print(arvore)
                 print('\n')
-                
+
         def jaFalhou(arvore):
+            #eh possivel elimitar arvores prematuramente ao verificar que elas possuem terminais que diferem do esperado
             finais = []
             for i in range(len(arvore)):
                 if arvore[1] in self.terminais:
@@ -391,7 +351,7 @@ class gramatica(object):
                 if finais[i] != base[i]:
                     return False
             return True
-     
+
         posProds = []
         #junta todas producoes de variaveis possivelmente utilizadas na arvore
         for i in range(len(tabela)-1):
@@ -425,156 +385,113 @@ class gramatica(object):
                         if prod not in posProds and prod not in temp:
                             temp.append(prod)
         posProds = temp[:]
-        for item in posProds:
-            print(item)
-
+        #inicializa lista de arvores com listas com o numero maximo de nodos
         arvores = [[[] for y in range(2**(len(base)+1))] for x in range(1500)]
         arvoresNice = []
-        
+
+        #inicializa primeiras arvores com todas producoes que partem do simbolo inicial
         indAr = 0
         for prod in posProds:
             if prod[0] == self.inicial:
-                arvores[indAr][0] = prod   
+                arvores[indAr][0] = prod
                 indAr += 1
         indAr -=1
 
         i = 0
-        input("k")
+        #itera pelo vetor de arvores enquanto o indice da ultima arvore ocupada nao cresce
         while i <= indAr:
-            #input("k")
-            print("Vendo nova arvore")
-            folhas = 0
             j=0
-            print(i)
-            print('\n')
+            #itera por todas producoes de cada arvore
             while j < len(arvores[i]):
+                #quando eh uma producao de variaveis
                 if len(arvores[i][j]) == 3:
-                    preenchido = 0
+                    preenchido = 0   #flag para verificar se ja preencheu a arvore no inidice i
                     for prod in posProds:
-                        print("Prod testada")
-                        print(prod)
                         if arvores[i][j][1] == prod[0] and preenchido == 0:
+                            #quando encontra uma producao encabeceada pela variaveis na esquerda da prod atual na arvore
+                            #se o indice do filho esta dentro da arvore
                             if ((j+1)*2)-1 < 2**len(base):
-                                print("prod a ser preenchida")
-                                print(arvores[i][((j+1)*2)-1])
+                                #se a producao atual e vazia, a fim de nao sobrescrever as arvoreds geradas pelas iteracoes anteriores
                                 if arvores[i][((j+1)*2)-1] == []:
+                                    #copia a arvore atual para uma variavel temporaria a fim de testar se deve incluir na arvore
                                     arTemp = arvores[i][:]
                                     arTemp[((j+1)*2)-1] = prod
+                                    #dado que a arvore a ser incluida nao viola o limite de folhas, nao se encontra na arvore nem teve problema na geracao de terminais
                                     if arTemp not in arvores and numeroFolhas(arTemp) <= len(base) and jaFalhou(arTemp):
                                         arvores[i][((j+1)*2)-1] = prod
                                         preenchido = 1
-                                print("indAr = " + str(indAr))
-                                print("k1")
-                                print(numeroFolhas(arvores[i]))
-                                pt(arvores[i])
-                                print('\n')
+                            #ignora arvore quando numero de folhas viola limite da entrada
                             if numeroFolhas(arvores[i]) > len(base):
                                 break
-                            #elif numeroFolhas(arvores[i]) == len(base):
+                            #testa se a arvore atual ja se encontra completa e correta de acordo com a entrada
                             if verificaFim(arvores[i]):
                                 if arvores[i] not in arvoresNice:
                                     arvoresNice.append(arvores[i])
-                                    print("DEU BOM1")
-                                    print(arvores[i])
-                                    #input("aeee")
-                                    break        
-                            
+                                    break
+                        #quando a arvore do indice i ja esta preenchida entao vai para a primeira diposnivel a partir do incide da ultima arvore na lista
                         elif arvores[i][j][1] == prod[0] and preenchido == 1:
                             if ((j+1)*2)-1 < 2**len(base):
                                 tempAr = arvores[i][:]
                                 tempAr[((j+1)*2)-1] = prod
-                                if tempAr not in arvores and numeroFolhas(tempAr) <= len(base) and jaFalhou(tempAr):                               
+                                if tempAr not in arvores and numeroFolhas(tempAr) <= len(base) and jaFalhou(tempAr):
                                     indAr += 1
                                     arvores[indAr] = arvores[i][:]
                                     arvores[indAr][((j+1)*2)-1] = prod
-                                    print("indAr = " + str(indAr))
-                                    print("k2")
-                                    print(str(numeroFolhas(arvores[indAr-1])))
-                                    pt(arvores[indAr])
-                                    print('\n')
                             if numeroFolhas(arvores[indAr]) > len(base):
                                 break
-                            #elif numeroFolhas(arvores[i]) == len(base):
                             if verificaFim(arvores[i]):
                                 if arvores[i] not in arvoresNice:
                                     arvoresNice.append(arvores[i])
-                                    print("DEU BOM2")
-                                    print(arvores[i])
-                                    #input("aeee")
                                     break
-                            
                     preenchido = 0
+                    #repete o processo anterior mas para a derivacao a direita
                     for prod in posProds:
-                        print("Prod testada")
-                        print(prod)
                         if arvores[i][j][2] == prod[0] and preenchido == 0:
-                            if ((j+1)*2) < 2**len(base):
-                                print("prod a ser preenchida")
-                                print(arvores[i][((j+1)*2)])
+                            if ((j+1)*2) < 2**(len(base)+1):
                                 if arvores[i][((j+1)*2)] == []:
                                     arTemp = arvores[i][:]
                                     arTemp[((j+1)*2)] = prod
                                     if arTemp not in arvores and numeroFolhas(arTemp) <= len(base) and jaFalhou(arTemp):
                                         arvores[i][((j+1)*2)] = prod
                                         preenchido = 1
-                                print("indAr = " + str(indAr))
-                                print("k3")
-                                print(str(numeroFolhas(arvores[i])))
-                                pt(arvores[i])
-                                print('\n')
                             if numeroFolhas(arvores[i]) > len(base):
                                 break
-                            #elif numeroFolhas(arvores[i]) == len(base):
                             if verificaFim(arvores[i]):
                                 if arvores[i] not in arvoresNice:
                                     arvoresNice.append(arvores[i])
-                                    print("DEU BOM3")
-                                    print(arvores[i])
-                                    #input("aeee")
                                     break
-                            
-                            
                         elif arvores[i][j][2] == prod[0] and preenchido == 1:
-                            if ((j+1)*2) < 2**len(base):
+                            if ((j+1)*2) < 2**(len(base)+1):
                                 tempAr = arvores[i][:]
                                 tempAr[((j+1)*2)] = prod
                                 if tempAr not in arvores and numeroFolhas(tempAr) <= len(base) and jaFalhou(tempAr):
                                     indAr += 1
                                     arvores[indAr] = arvores[i][:]
                                     arvores[indAr][((j+1)*2)] = prod
-                                    print("indAr = " + str(indAr))
-                                    print("k4")
-                                    print(str(numeroFolhas(arvores[indAr-1])))
-                                    pt(arvores[indAr])
-                                    print('\n')
                             if numeroFolhas(arvores[indAr]) > len(base):
                                 break
-                            #elif numeroFolhas(arvores[i]) == len(base):
                             if verificaFim(arvores[i]):
                                 if arvores[i] not in arvoresNice:
                                     arvoresNice.append(arvores[i])
-                                    print("DEU BOM4")
-                                    print(arvores[i])
-                                    #input("aeee")
                                     break
-                           
-                if len(arvores[i][j]) == 2:
-                    if ((j+1)*2-1) < 2**len(base):
-                        arvores[i][(j+1)*2-1] = [arvores[i][j][1]]
-                j=j+1               
+                elif len(arvores[i][j]) == 2:
+                    if ((j+1)*2)-1 < 2**(len(base)+1):
+                        if arvores[i][((j+1)*2)-1] == []:
+                            arvores[i][((j+1)*2)-1] = [arvores[i][j][1]]
+                    
+                    
+                    
+                j=j+1
             i=i+1
-        
-        
         if arvoresNice != []:
             print("UHULESUCESSO")
+            print("gastaste!")
             for arvore in arvoresNice:
                 print("AQUI TEM SUCESSO")
                 pa(arvore)
-                #print(numeroFolhas(arvore))
                 print('\n')
         else:
             print("deu ruim")
-            
 
 
 
@@ -655,4 +572,3 @@ if __name__ == "__main__":
     blabla.parserCYK("x + x * x")
 #    blabla.parserCYK("dog runs in the park")
 #    blabla.parserCYK("a a b a")
-
