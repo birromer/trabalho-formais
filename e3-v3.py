@@ -321,45 +321,18 @@ class gramatica(object):
                     folhas+=1
             return folhas
 
-        """
-        def pa(arvore):
-            i = 0
-            b = 0
-            espacos1 = len(arvore)
-            espacos2 = len(arvore)
-            #print(' '*espacos2, end='')
-            for j in range(len(arvore)):
-                #print(' '*espacos2, end='')
-                if arvore[j] == []:
-                    #print(' '* espacos1, end='')
-                    print('-', end='   ')
-                    espacos1//=2
-                else:
-                    #print(' '* espacos1, end='')
-                    print(arvore[j][0], end='   ')
-                    espacos1//=2
-                b+=1
-                if b == 2**i:
-                    print('\n')
-            #        print(' '*espacos2, end='')
-                    espacos2//=2
-                    espacos2+=1
-                    i+=1
-                    b=0
-        """
-        
         def pa(arvore):
             i = 0
             b = 0
             h = 0
             for j in range(len(arvore)):
-                print(' ' * int(128/((2**h)*2) - len(arvore[j])-1), end='')
+                print(' ' * int((2**(len(base)+2))/((2**h)*2) - len(arvore[j])-1), end='')
                 if arvore[j] == []:
                     print('-', end='')
                 else:
                     print(arvore[j][0], end='')
                 b+=1
-                print(' ' * int(128/((2**h)*2)), end='')
+                print(' ' * int((2**(len(base)+2))/((2**h)*2)), end='')
                 if b == 2**i:
                     print('\n')
                     h+=1
@@ -507,10 +480,7 @@ class gramatica(object):
                 elif len(arvores[i][j]) == 2:
                     if ((j+1)*2)-1 < 2**(len(base)+1):
                         if arvores[i][((j+1)*2)-1] == []:
-                            arvores[i][((j+1)*2)-1] = [arvores[i][j][1]]
-                    
-                    
-                    
+                            arvores[i][((j+1)*2)-1] = [arvores[i][j][1]]      
                 j=j+1
             i=i+1
         if arvoresNice != []:
@@ -527,16 +497,19 @@ class gramatica(object):
 
     def parserCYK(self, entrada):
         aceita = 0
+
         def pt(tabela):
-            for i in range(len(tabela)):
-                for j in range(len(tabela[i])):
-                    print(str(tabela[i][j]) + '\v', end='')
-            """
+            maior_subset = 0
             for linha in tabela:
                 for var in linha:
-                    print("| " + str(var) + " |\v\v", end='')
+                    if len(var) > maior_subset:
+                        maior_subset = len(var)
+            print(maior_subset)
+            for linha in tabela:
+                for var in linha:
+                    print("| " + str(var) + " |\t", end='')
                 print('\n')
-            """
+                
         #separa terminais da entrada
         if ' ' in entrada:
             base = entrada.split(' ')
