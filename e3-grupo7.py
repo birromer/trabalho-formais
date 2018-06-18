@@ -340,8 +340,8 @@ class gramatica(object):
                     print('\n')
                     h+=1
                     i+=1
-                    b=0            
-        
+                    b=0
+
         def pt(arvores):
             for arvore in arvores:
                 print(arvore)
@@ -483,7 +483,7 @@ class gramatica(object):
                 elif len(arvores[i][j]) == 2:
                     if ((j+1)*2)-1 < 2**(len(base)+1):
                         if arvores[i][((j+1)*2)-1] == []:
-                            arvores[i][((j+1)*2)-1] = [arvores[i][j][1]]      
+                            arvores[i][((j+1)*2)-1] = [arvores[i][j][1]]
                 j=j+1
             i=i+1
         if arvoresNice != []:
@@ -511,7 +511,7 @@ class gramatica(object):
                 for var in linha:
                     print('{0: <{width}}'.format("| " + str(var) + " |", width = width), end='')
                 print('\n')
-                
+
         #separa terminais da entrada
         if ' ' in entrada:
             base = entrada.split(' ')
