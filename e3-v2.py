@@ -271,8 +271,8 @@ class gramatica(object):
             else:
                 if ((i+1)*2) < len(arvore):
                     return encontraTerminais(arvore, ((i+1)*2)-1, terminais) + encontraTerminais(arvore, ((i+1)*2), terminais)
-        
-        
+
+
         def verificaFim(arvore):
             print("aaaaaaaaaaaaaaaaa")
             print(arvore)
@@ -283,8 +283,8 @@ class gramatica(object):
             print(folhas)
             print("base")
             print(base)
-            
-#            input("kk")            
+
+#            input("kk")
 
             print(base)
             if len(folhas) != len(base):
@@ -297,7 +297,7 @@ class gramatica(object):
                         return False
             print("bbbbbbbbbbbba")
             return True
-        
+
         def numeroFolhas(arvore):
             #print("aaaaaaaaaaaa")
             #print(arvore)
@@ -337,12 +337,12 @@ class gramatica(object):
                     #print("PROD DE TERMINAL")
                     folhas+=1
 #                else:
-                    #print("NAO EH FOLHA")       
+                    #print("NAO EH FOLHA")
             #print("NUMERO DE FOLHAAAAAAAAAAAAAAAAAAAAAAAAAAAAS")
             #print(folhas)
             return folhas
-        
-       
+
+
         def pa(arvore):
             print(arvore)
             i = 0
@@ -357,8 +357,8 @@ class gramatica(object):
                     print('\n')
                     i+=1
                     b=0
-            
-                
+
+
 # =============================================================================
 #         def pt(arvore):
 #             print("kkeaemen")
@@ -371,12 +371,12 @@ class gramatica(object):
 #                     print('\n')
 #                     tamLinha*=2
 # =============================================================================
-                    
+
         def pt(arvores):
             for arvore in arvores:
                 print(arvore)
                 print('\n')
-                
+
         def jaFalhou(arvore):
             finais = []
             for i in range(len(arvore)):
@@ -386,7 +386,7 @@ class gramatica(object):
                 if finais[i] != base[i]:
                     return False
             return True
-     
+
         posProds = []
         #junta todas producoes de variaveis possivelmente utilizadas na arvore
         for i in range(len(tabela)-1):
@@ -425,13 +425,17 @@ class gramatica(object):
 
         arvores = [[[] for y in range(2**(len(base)+1))] for x in range(1500)]
         arvoresNice = []
-        
+
         indAr = 0
         for prod in posProds:
             if prod[0] == self.inicial:
-                arvores[indAr][0] = prod   
+                arvores[indAr][0] = prod
                 indAr += 1
-        indAr -=1
+#        indAr -=1
+
+        for prod in arvores:
+            if prod[0] != []:
+                print(prod)
 
         i = 0
         input("k")
@@ -474,13 +478,13 @@ class gramatica(object):
                                     print(arvores[i])
                                     pt(arvores)
                                     #input("aeee")
-                                    break        
-                            
+                                    break
+
                         elif arvores[i][j][1] == prod[0] and preenchido == 1:
                             if ((j+1)*2)-1 < 2**len(base):
                                 tempAr = arvores[i][:]
                                 tempAr[((j+1)*2)-1] = prod
-                                if tempAr not in arvores and numeroFolhas(tempAr) <= len(base) and jaFalhou(tempAr):                               
+                                if tempAr not in arvores and numeroFolhas(tempAr) <= len(base) and jaFalhou(tempAr):
                                     indAr += 1
                                     arvores[indAr] = arvores[i][:]
                                     arvores[indAr][((j+1)*2)-1] = prod
@@ -501,7 +505,7 @@ class gramatica(object):
                                     pt(arvores)
                                     #input("aeee")
                                     break
-                            
+
                     preenchido = 0
                     for prod in posProds:
                         print("Prod testada")
@@ -533,8 +537,8 @@ class gramatica(object):
                                     pt(arvores)
                                     #input("aeee")
                                     break
-                            
-                            
+
+
                         elif arvores[i][j][2] == prod[0] and preenchido == 1:
                             if ((j+1)*2) < 2**len(base):
                                 tempAr = arvores[i][:]
@@ -560,11 +564,11 @@ class gramatica(object):
                                     pt(arvores)
                                     #input("aeee")
                                     break
-                           
-                j=j+1               
+
+                j=j+1
             i=i+1
-        
-        
+
+
         if arvoresNice != []:
             print("UHULESUCESSO")
             for arvore in arvoresNice:
@@ -574,7 +578,7 @@ class gramatica(object):
                 print('\n')
         else:
             print("deu ruim")
-            
+
 
 
 
@@ -645,13 +649,15 @@ class gramatica(object):
 
 if __name__ == "__main__":
     blabla = gramatica()
+    blabla.leGramatica("teste_prog.txt")
 #    blabla.leGramatica("gramatica_exemplo6.txt")
-    blabla.leGramatica("gramatica_exemplo5.txt")
+#    blabla.leGramatica("gramatica_exemplo5.txt")
 #    blabla.leGramatica("gramatica_exemplo2.txt")
 #    blabla.leGramatica("gramatica_exemplo1.txt")
 #    blabla.defFormal()
     blabla.djowsky()
+    blabla.parserCYK("b b c")
 #    blabla.parserCYK("x o x")
-    blabla.parserCYK("x + x * x")
+#    blabla.parserCYK("x + x * x")
 #    blabla.parserCYK("dog runs in the park")
 #    blabla.parserCYK("a a b a")
