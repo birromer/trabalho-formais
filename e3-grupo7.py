@@ -221,14 +221,27 @@ class gramatica(object):
 
 
     def simplifica(self):
+        print("\nRemovendo producoes vazias")
         self.removeVazios()
+        for prod in self.regras:
+            print(prod)
+        print("Removendo produções unitarias")
         self.removeUnit()
+        for prod in self.regras:
+            print(prod)
+        print("Removendo variáveis e terminais inuteis")
         self.removeInuteis()
-
+        for prod in self.regras:
+            print(prod)
+        print("Variaveis:")
+        print(self.variaveis)
+        print("Terminais:")
+        print(self.terminais)
 
     def djowsky(self):
+        print("\nTransformando na FNC")
         #simplifica
-        self.simplifica()
+        #self.simplifica()
         #remove producao vazia a partir da variavel inidial
         for prod in self.regras:
             if prod[0] == self.inicial:
@@ -261,6 +274,10 @@ class gramatica(object):
                 self.regras[i] = self.regras[i][:2]
                 self.regras[i].append(novaVar)
             i+=1
+        print("Regras apos transformacao em FNC")
+        for prod in self.regras:
+            print(prod)
+
 
 
     def geraArvoreDerivacao(self, tabela, base):
@@ -340,8 +357,8 @@ class gramatica(object):
                     print('\n')
                     h+=1
                     i+=1
-                    b=0            
-        
+                    b=0
+
         def pt(arvores):
             for arvore in arvores:
                 print(arvore)
@@ -483,7 +500,7 @@ class gramatica(object):
                 elif len(arvores[i][j]) == 2:
                     if ((j+1)*2)-1 < 2**(len(base)+1):
                         if arvores[i][((j+1)*2)-1] == []:
-                            arvores[i][((j+1)*2)-1] = [arvores[i][j][1]]      
+                            arvores[i][((j+1)*2)-1] = [arvores[i][j][1]]
                 j=j+1
             i=i+1
         if arvoresNice != []:
@@ -511,7 +528,7 @@ class gramatica(object):
                 for var in linha:
                     print('{0: <{width}}'.format("| " + str(var) + " |", width = width), end='')
                 print('\n')
-                
+
         #separa terminais da entrada
         if ' ' in entrada:
             base = entrada.split(' ')
@@ -576,17 +593,14 @@ if __name__ == "__main__":
     blabla = gramatica()
     print("Arquivo com gramatica (nao esquecer da extensao.txt): ")
     gramatica_entrada = input()
-#    blabla.leGramatica("gramatica_exemplo6.txt")
-#    blabla.leGramatica("gramatica_exemplo5.txt")
-#    blabla.leGramatica("gramatica_exemplo2.txt")
-#    blabla.leGramatica("gramatica_exemplo1.txt")
     blabla.leGramatica(gramatica_entrada)
+    print("Gramatica de entrada:")
     blabla.defFormal()
+    print("\nGramatica simplificada:")
+    blabla.simplifica()
+    print("\nGramatica na FNC:")
     blabla.djowsky()
     print("Palavra de entrada (formato: 't t t t', t=terminal): ")
     palavra_entrada = input()
+    print("Tabela CYK e arvores de derivacao")
     blabla.parserCYK(palavra_entrada)
-#    blabla.parserCYK("x o x")
-#    blabla.parserCYK("x + x * x")
-#    blabla.parserCYK("dog runs in the park")
-#    blabla.parserCYK("a a b a")
